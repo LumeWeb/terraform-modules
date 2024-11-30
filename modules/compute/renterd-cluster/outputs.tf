@@ -1,60 +1,45 @@
 
-output "bus_host" {
-  description = "Host address of the bus node"
-  value       = module.renterd_bus.provider_host
+output "bus" {
+  description = "Bus node details"
+  value = {
+    id         = module.renterd_bus.id
+    host       = module.renterd_bus.provider_host
+    port       = module.renterd_bus.port
+    dns_fqdn   = module.renterd_bus.dns_fqdn
+    state      = module.renterd_bus.state
+  }
 }
 
-output "worker_hosts" {
-  description = "Host addresses of the worker nodes"
-  value       = module.renterd_workers[*].provider_host
+output "workers" {
+  description = "Worker nodes details"
+  value = [
+    for i, worker in module.renterd_workers : {
+      id         = worker.id
+      host       = worker.provider_host
+      port       = worker.port
+      dns_fqdn   = worker.dns_fqdn
+      state      = worker.state
+      worker_id  = "worker-${i + 1}"
+    }
+  ]
 }
 
-output "autopilot_host" {
-  description = "Host address of the autopilot node"
-  value       = module.renterd_autopilot.provider_host
+output "autopilot" {
+  description = "Autopilot node details"
+  value = {
+    id         = module.renterd_autopilot.id
+    host       = module.renterd_autopilot.provider_host
+    port       = module.renterd_autopilot.port
+    dns_fqdn   = module.renterd_autopilot.dns_fqdn
+    state      = module.renterd_autopilot.state
+  }
 }
 
-output "bus_dns_fqdn" {
-  description = "DNS FQDN of the bus node"
-  value       = module.renterd_bus.dns_fqdn
-}
-
-output "worker_dns_fqdns" {
-  description = "DNS FQDNs of the worker nodes"
-  value       = module.renterd_workers[*].dns_fqdn
-}
-
-output "autopilot_dns_fqdn" {
-  description = "DNS FQDN of the autopilot node"
-  value       = module.renterd_autopilot.dns_fqdn
-}
-
-output "bus_id" {
-  description = "ID of the bus node"
-  value       = module.renterd_bus.id
-}
-
-output "worker_ids" {
-  description = "IDs of the worker nodes"
-  value       = module.renterd_workers[*].id
-}
-
-output "autopilot_id" {
-  description = "ID of the autopilot node"
-  value       = module.renterd_autopilot.id
-}
-
-output "bus_port" {
-  description = "Port of the bus node"
-  value       = module.renterd_bus.port
-}
-
-output "worker_ports" {
-  description = "Ports of the worker nodes"
-  value       = module.renterd_workers[*].port
-}
-
-output "autopilot_port" {
-  description = "Port of the autopilot node"
-  value       = module.renterd_autopilot.port
+output "cluster_info" {
+  description = "General cluster information"
+  value = {
+    worker_count = var.worker_count
+    environment  = var.environment
+    base_domain  = var.base_domain
+  }
 }

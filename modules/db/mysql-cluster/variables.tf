@@ -1,6 +1,11 @@
 variable "cluster_name" {
   description = "Name of the MySQL cluster"
   type        = string
+
+  validation {
+    condition     = can(regex("^[a-z][a-z0-9-]*$", var.cluster_name))
+    error_message = "Cluster name must be lowercase alphanumeric with hyphens"
+  }
 }
 
 variable "replica_count" {
@@ -9,8 +14,8 @@ variable "replica_count" {
   default     = 2
 
   validation {
-    condition     = var.replica_count >= 0
-    error_message = "replica_count must be >= 0"
+    condition     = var.replica_count >= 0 && var.replica_count <= 10
+    error_message = "replica_count must be between 0 and 10"
   }
 }
 
@@ -125,6 +130,14 @@ variable "replica_pricing_amount" {
 variable "allowed_providers" {
   description = "List of allowed Akash provider addresses"
   type        = list(string)
+
+  validation {
+    condition = alltrue([
+      for provider in var.allowed_providers :
+      can(regex("^akash[0-9a-z]{39}$", provider))
+    ])
+    error_message = "Invalid Akash provider address format"
+  }
 }
 
 # Metrics Configuration

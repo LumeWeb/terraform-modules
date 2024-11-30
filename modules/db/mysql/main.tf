@@ -1,94 +1,127 @@
 locals {
-  # Default Percona MySQL image
-  default_image = "ghcr.io/lumeweb/akash-mysql:develop"
-
-  # Base MySQL environment variables 
-  base_env_vars = {
-    MYSQL_ROOT_PASSWORD     = var.root_password
-    MYSQL_PORT              = var.mysql_port
-    SERVER_ID               = var.server_id
-    INNODB_BUFFER_POOL_SIZE = var.innodb_buffer_pool_size
-  }
-
-  # Add etcd configuration if endpoints are provided
-  etcd_env_vars = length(var.etc_endpoints) > 0 ? {
-    ETCDCTL_ENDPOINTS = join(",", var.etc_endpoints)
-    ETC_USERNAME = var.etc_username
-    ETC_PASSWORD = var.etc_password
-  } : {}
-
-  # MySQL service configuration
-  mysql_service = {
-    name      = "mysql"
-    image     = local.default_image
-    cpu_units = var.cpu_units
+  # 1. Base configuration
+  base_config = {
+    name = coalesce(var.name, "mysql")
+    image = coalesce(var.image, "ghcr.io/lumeweb/akash-mysql:develop")
+    cpu_units = var.resources.cpu.cores
     memory = {
-      value = var.memory_size
-      unit  = var.memory_unit
+      value = var.resources.memory.size
+      unit = var.resources.memory.unit
     }
-    storage = {
-      persistent_data = {
-        size = {
-          value = var.storage_size
-          unit  = var.storage_unit
-        }
-        mount = "/var/lib/mysql"
-      }
-    }
-    expose = concat([
-      {
-        port   = var.mysql_port
-        global = true
-        proto  = "tcp"
-      }
-    ],
-        var.metrics_enabled ? [
-        {
-          port   = var.metrics_port
-          global = true
-          proto  = "tcp"
-        }
-      ] : []
-    )
-    env = merge(
-      local.base_env_vars,
-      local.etcd_env_vars,
-        var.metrics_enabled ? {
-        METRICS_ENABLED = "1"
-        METRICS_PORT    = var.metrics_port
-      } : {},
-        var.cluster_mode ? {
-        CLUSTER_MODE = "true"
-      } : {},
-      {
-        REPL_USER     = var.repl_user
-        REPL_PASSWORD = var.repl_password
-      }
-    )
   }
+
+  # 2. Storage configuration
+  storage_config = {
+    root = {
+      size = {
+        value = var.resources.storage.size
+        unit = var.resources.storage.unit
+      }
+    }
+    persistent_data = {
+      size = {
+        value = var.resources.persistent_storage.size
+        unit = var.resources.persistent_storage.unit
+      }
+      mount = "/var/lib/mysql"
+      class = var.resources.persistent_storage.class
+      read_only = false
+    }
+  }
+
+  # 3. Environment variables - Core MySQL
+  base_env_vars = {
+    MYSQL_ROOT_PASSWORD = var.root_password
+    MYSQL_PORT = var.network.mysql_port
+    INNODB_BUFFER_POOL_SIZE = var.performance.innodb_buffer_pool_size
+  }
+
+  # Component-specific env vars
+  component_env_vars = {
+    # ETCD integration
+    etcd = length(var.etcd.endpoints) > 0 ? {
+      ETCDCTL_ENDPOINTS = join(",", var.etcd.endpoints)
+      ETC_USERNAME = var.etcd.username
+      ETC_PASSWORD = var.etcd.password
+    } : {}
+
+    # Metrics configuration
+    metrics = var.metrics.enabled ? {
+      METRICS_ENABLED = "1"
+      METRICS_PORT = tostring(var.metrics.port)
+    } : {}
+
+    # Cluster configuration
+    cluster = var.cluster.enabled ? {
+      CLUSTER_MODE = "true"
+      REPL_USER = var.cluster.repl_user
+      REPL_PASSWORD = var.cluster.repl_password
+    } : {}
+  }
+
+  # Merge all environment variables
+  service_env_vars = merge(
+    local.base_env_vars,
+    local.component_env_vars.etcd,
+    local.component_env_vars.metrics,
+    local.component_env_vars.cluster
+  )
+
+  # 4. Service expose configuration
+  service_expose = concat(
+    # Main MySQL port
+    [{
+      port = var.network.mysql_port
+      global = true
+      proto = "tcp"
+    }],
+    # Optional metrics port
+    var.metrics.enabled ? [{
+      port = var.metrics.port
+      global = true
+      proto = "tcp"
+    }] : []
+  )
+
+  # 5. Final service configuration
+  service_config = {
+    name = local.base_config.name
+    image = local.base_config.image
+    cpu_units = local.base_config.cpu_units
+    memory = local.base_config.memory
+    storage = local.storage_config
+    env = local.service_env_vars
+    expose = local.service_expose
+  }
+
+  # 6. Standard tags
+  common_tags = merge(
+    var.tags,
+    {
+      Service = "MySQL"
+      Engine = "Percona"
+      Role = var.cluster.enabled ? "cluster-node" : "standalone"
+      Component = "database"
+      ManagedBy = "terraform"
+    }
+  )
 }
 
 module "mysql_deployment" {
   source = "../../compute/akash"
 
-  service = local.mysql_service
-
+  service = local.service_config
+  
   placement_strategy = {
-    name       = var.placement_strategy_name
+    name = "${var.name}-placement"
     attributes = var.placement_attributes
     pricing = {
-      denom  = "uakt"
+      denom = "uakt"
       amount = var.pricing_amount
     }
   }
 
   allowed_providers = var.allowed_providers
-
-  tags = merge(
-    var.tags,
-    {
-      Service = "MySQL"
-      Engine  = "Percona"
-    }
-  )
+  environment = var.environment
+  tags = local.common_tags
 }

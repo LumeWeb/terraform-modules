@@ -8,7 +8,7 @@ locals {
   }
 
   # Grafana service configuration
-  grafana_service = {
+  service_config = {
     grafana = {
       image = var.grafana_image
       cpu_units = var.cpu_units
@@ -39,7 +39,7 @@ locals {
 module "grafana_deployment" {
   source = "../../compute/akash"
 
-  service = local.grafana_service
+  service = local.service_config
 
   placement_strategy = {
     name = var.placement_strategy_name

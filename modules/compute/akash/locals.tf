@@ -4,7 +4,6 @@ locals {
   # Name handling constants
   k8s_max_length = 63
   k8s_hash_length = 8  # Reduced from 10
-  max_name_length = local.k8s_max_length - local.k8s_hash_length
 
   # Hash the tags instead of using them directly
   tag_hash = length(var.tags) > 0 ? sha256(jsonencode(var.tags)) : ""

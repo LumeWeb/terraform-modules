@@ -1,54 +1,42 @@
-# Resource Configuration
-variable "cpu_units" {
-  description = "CPU units for etcd service"
-  type        = number
-  default     = 1000
+variable "cluster_enabled" {
+  description = "Enable cluster mode"
+  type        = bool
+  default     = false
 }
 
-variable "memory_size" {
-  description = "Memory size for etcd service"
-  type        = number
-  default     = 1
-}
-
-variable "memory_unit" {
-  description = "Memory unit (Gi, Mi)"
+variable "cluster_token" {
+  description = "Initial cluster token"
   type        = string
-  default     = "Gi"
+  default     = ""
 }
 
-variable "storage_size" {
-  description = "Storage size for etcd data"
-  type        = number
-  default     = 10
-}
-
-variable "storage_unit" {
-  description = "Storage unit (Gi, Mi)"
-  type        = string
-  default     = "Gi"
-}
-
-variable "placement_attributes" {
-  description = "Placement attributes for provider selection"
-  type        = map(string)
-  default     = {}
-}
-
-variable "allowed_providers" {
-  description = "List of allowed Akash provider addresses"
+variable "cluster_peers" {
+  description = "List of cluster peer addresses"
   type        = list(string)
   default     = []
 }
 
-# Tags
-variable "tags" {
-  description = "Resource tags"
-  type        = map(string)
-  default     = {}
+variable "metrics_enabled" {
+  description = "Enable metrics endpoint"
+  type        = bool
+  default     = false
 }
-variable "environment" {
-  description = "Deployment environment"
-  type        = string
-  default     = "dev"
+
+variable "ports" {
+  description = "Port configuration"
+  type = object({
+    client = optional(number, 2379)
+    peer = optional(number, 2380)
+    metrics = optional(number, 2381)
+  })
+  default = {}
+
+  validation {
+    condition = alltrue([
+      var.ports.client >= 1024 && var.ports.client <= 65535,
+      var.ports.peer >= 1024 && var.ports.peer <= 65535,
+      var.ports.metrics >= 1024 && var.ports.metrics <= 65535
+    ])
+    error_message = "All ports must be between 1024 and 65535"
+  }
 }

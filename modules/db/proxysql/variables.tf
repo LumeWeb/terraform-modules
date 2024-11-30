@@ -1,75 +1,138 @@
+# Core Configuration
+variable "name" {
+  description = "Name for the ProxySQL service"
+  type        = string
+  default     = "proxysql"
+
+  validation {
+    condition     = can(regex("^[a-z][a-z0-9-]*$", var.name))
+    error_message = "Name must be lowercase alphanumeric with hyphens"
+  }
+}
+
+variable "image" {
+  description = "ProxySQL container image"
+  type        = string
+  default     = "ghcr.io/lumeweb/akash-proxysql:develop"
+}
+
+variable "environment" {
+  description = "Deployment environment"
+  type        = string
+  default     = "prod"
+}
+
+# Authentication
 variable "admin_password" {
   description = "ProxySQL admin password"
   type        = string
   sensitive   = true
+
+  validation {
+    condition     = length(var.admin_password) >= 8
+    error_message = "Admin password must be at least 8 characters long"
+  }
 }
 
-variable "proxy_port" {
-  description = "ProxySQL main frontend port"
+# Resource Configuration
+variable "resources" {
+  description = "Compute resources configuration"
+  type = object({
+    cpu = optional(object({
+      cores = optional(number, 1)
+    }), {})
+    memory = optional(object({
+      size = optional(number, 512)
+      unit = optional(string, "Mi")
+    }), {})
+    storage = optional(object({
+      size = optional(number, 1)
+      unit = optional(string, "Gi")
+    }), {})
+    persistent_storage = optional(object({
+      size = optional(number, 1)
+      unit = optional(string, "Gi")
+      class = optional(string, "beta3")
+      mount = optional(string, "/var/lib/proxysql")
+    }), {})
+  })
+  default = {}
+
+  validation {
+    condition = contains(["Ki", "Mi", "Gi", "Ti"], var.resources.memory.unit)
+    error_message = "Memory unit must be one of: Ki, Mi, Gi, Ti"
+  }
+
+  validation {
+    condition = var.resources.persistent_storage == null || contains(["beta1", "beta2", "beta3"], var.resources.persistent_storage.class)
+    error_message = "Storage class must be one of: beta1, beta2, beta3"
+  }
+}
+
+# Network Configuration
+variable "ports" {
+  description = "Port configuration"
+  type = object({
+    proxy = optional(number, 6033)
+    admin = optional(number, 6032)
+  })
+  default = {}
+
+  validation {
+    condition = var.ports.proxy >= 1024 && var.ports.proxy <= 65535
+    error_message = "Proxy port must be between 1024 and 65535"
+  }
+
+  validation {
+    condition = var.ports.admin >= 1024 && var.ports.admin <= 65535
+    error_message = "Admin port must be between 1024 and 65535"
+  }
+}
+
+# ETCD Integration
+variable "etcd" {
+  description = "ETCD configuration"
+  type = object({
+    endpoints = optional(list(string), [])
+    username = optional(string, "root")
+    password = optional(string, "")
+  })
+  default = {}
+
+  validation {
+    condition = length(var.etcd.endpoints) == 0 || can(regex("^[a-zA-Z0-9_-]+$", var.etcd.username))
+    error_message = "ETCD username must be alphanumeric with underscores and hyphens"
+  }
+}
+
+# Akash Configuration
+variable "placement_attributes" {
+  description = "Placement attributes for provider selection"
+  type        = map(string)
+  default     = {}
+}
+
+variable "pricing_amount" {
+  description = "Maximum price for deployment in uakt"
   type        = number
-  default     = 6033
-}
-
-variable "admin_port" {
-  description = "ProxySQL admin interface port"
-  type        = number
-  default     = 6032
-}
-
-variable "cpu_cores" {
-  description = "Number of CPU cores"
-  type        = number
-  default     = 1
-}
-
-variable "memory_size" {
-  description = "Memory size"
-  type        = number
-  default     = 512
-}
-
-variable "memory_unit" {
-  description = "Memory unit (Mi, Gi)"
-  type        = string
-  default     = "Mi"
-}
-
-variable "storage_size" {
-  description = "Storage size"
-  type        = number
-  default     = 1
-}
-
-variable "storage_unit" {
-  description = "Storage unit (Mi, Gi)"
-  type        = string
-  default     = "Gi"
-}
-
-variable "etcd_endpoints" {
-  description = "List of etcd endpoints"
-  type        = list(string)
-  default     = []
-}
-
-variable "etcd_username" {
-  description = "Username for etcd authentication"
-  type        = string
-  default     = "root"
-}
-
-variable "etcd_password" {
-  description = "Password for etcd authentication"
-  type        = string
-  default     = ""
-  sensitive   = true
+  default     = 10000
 }
 
 variable "allowed_providers" {
   description = "List of allowed Akash provider addresses"
   type        = list(string)
   default     = []
+
+  validation {
+    condition = alltrue([
+      for provider in var.allowed_providers :
+      can(regex("^akash[0-9a-z]{39}$", provider))
+    ])
+    error_message = "Invalid Akash provider address format"
+  }
 }
+
+# Tags
 variable "tags" {
   description = "Resource tags"
   type        = map(string)

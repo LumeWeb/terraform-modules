@@ -1,16 +1,30 @@
-output "master_endpoint" {
-  description = "The endpoint of the master MySQL instance"
-  value       = "${module.master.provider_host}:${module.master.port}"
-}
-
-output "replica_endpoints" {
-  description = "Map of replica endpoints by replica ID"
+output "master" {
+  description = "Master node details"
   value = {
-    for id, replica in module.replicas : id => "${replica.provider_host}:${replica.port}"
+    endpoint = "${module.master.provider_host}:${module.master.port}"
+    host     = module.master.provider_host
+    port     = module.master.port
+    state    = module.master.state
   }
 }
 
-output "cluster_size" {
-  description = "Total number of instances in the cluster"
-  value       = 1 + var.replica_count
+output "replicas" {
+  description = "Details of replica nodes"
+  value = {
+    for id, replica in module.replicas : id => {
+      endpoint = "${replica.provider_host}:${replica.port}"
+      host     = replica.provider_host
+      port     = replica.port
+      state    = replica.state
+    }
+  }
+}
+
+output "cluster_info" {
+  description = "General cluster information"
+  value = {
+    size = 1 + var.replica_count
+    name = var.cluster_name
+    environment = var.environment
+  }
 }

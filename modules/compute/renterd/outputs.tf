@@ -13,6 +13,11 @@ output "dns_fqdn" {
   value       = local.service_fqdn
 }
 
+output "s3_fqdn" {
+  description = "Fully Qualified Domain Name for the S3 endpoint"
+  value       = local.s3_fqdn
+}
+
 output "provider_host" {
   description = "Provider host for the deployment"
   value       = module.renterd_deployment.provider_host
