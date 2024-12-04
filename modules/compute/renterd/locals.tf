@@ -13,6 +13,7 @@ locals {
   is_cluster_mode = var.cluster == true
   proto = coalesce(var.network.enable_ssl, true) ? "https" : "http"
   http_port = coalesce(var.network.enable_ssl, true) ? 80 : coalesce(var.network.http_port, 9980)
+  s3_port = coalesce(var.network.enable_ssl, true) ? 80 : coalesce(var.network.s3_port, 9981)
 
   # 1. Base configuration
   base_config = {
@@ -106,6 +107,7 @@ locals {
     RENTERD_WORKER_ENABLED    = "false"
     RENTERD_SEED              = var.seed
     RENTERD_HTTP_ADDRESS      = ":${local.http_port}"
+    RENTERD_S3_ADDRESS      = ":${local.http_port}"
 
     # Bus-specific configurations
     RENTERD_BUS_BOOTSTRAP = tostring(coalesce(var.bus_config.bootstrap, true))
@@ -178,6 +180,7 @@ locals {
     # Non-cluster mode configuration
     RENTERD_SEED         = var.seed
     RENTERD_HTTP_ADDRESS = ":${local.http_port}"
+    RENTERD_S3_ADDRESS   = ":${local.s3_port}"
     RENTERD_API_PASSWORD = var.api_password
 
     # Enable all components by default in non-cluster mode

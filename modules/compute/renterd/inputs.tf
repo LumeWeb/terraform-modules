@@ -222,7 +222,7 @@ variable "api_password" {
 variable "image" {
   description = "Docker image for renterd"
   type        = string
-  default     = "ghcr.io/renterd/renterd:latest"
+  default     = "ghcr.io/lumeweb/akash-renterd:develop"
 }
 
 variable "tags" {

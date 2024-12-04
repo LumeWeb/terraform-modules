@@ -8,12 +8,12 @@ output "service_endpoints" {
   value       = module.renterd_deployment.service_endpoints
 }
 
-output "renterd_endpoint" {
+output "dns_fqdn" {
   description = "Renterd service FQDN endpoint"
   value       = local.service_fqdn
 }
 
-output "renterd_s3_endpoint" {
+output "s3_fqdn" {
   description = "Renterd S3 FQDN endpoint"
   value       = local.s3_fqdn
 }
@@ -34,11 +34,4 @@ output "port" {
     module.renterd_deployment.port,
     0
   )
-}
-
-output "service_states" {
-  description = "States of dependent services"
-  value = {
-    renterd = module.renterd_deployment.id
-  }
 }
