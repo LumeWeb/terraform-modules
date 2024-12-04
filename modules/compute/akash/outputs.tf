@@ -17,7 +17,8 @@ locals {
   # Determine if the service is using HTTP/HTTPS ports
   exposed_ports = {
     for expose in coalesce(var.service.expose, []) :
-    try(coalesce(expose.as, expose.port), expose.port) => {
+    "${try(coalesce(expose.as, expose.port), expose.port)}-${join("-", coalesce(expose.accept, []))}" => {
+      port = try(coalesce(expose.as, expose.port), expose.port)
       is_http = contains([80, 443], try(coalesce(expose.as, expose.port), expose.port))
       accept = coalesce(expose.accept, [])
     }
