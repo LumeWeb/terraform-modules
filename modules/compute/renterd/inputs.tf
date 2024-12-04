@@ -110,10 +110,10 @@ variable "worker_config" {
   default = {}
 
   validation {
-    condition     = var.worker_config == {} || (
-      var.worker_config.bus_remote_addr != null &&
-      var.worker_config.bus_remote_password != null &&
-      var.worker_config.id != null
+    condition     = length(keys(var.worker_config)) == 0 || (
+      try(var.worker_config.bus_remote_addr != null, false) &&
+      try(var.worker_config.bus_remote_password != null, false) &&
+      try(var.worker_config.id != null, false)
     )
     error_message = "When worker_config is provided, bus_remote_addr, bus_remote_password and id must be specified"
   }
@@ -143,9 +143,9 @@ variable "autopilot_config" {
   default = {}
 
   validation {
-    condition     = var.autopilot_config == {} || (
-      var.autopilot_config.bus_remote_addr != null &&
-      var.autopilot_config.bus_remote_password != null
+    condition     = length(keys(var.autopilot_config)) == 0 || (
+      try(var.autopilot_config.bus_remote_addr != null, false) &&
+      try(var.autopilot_config.bus_remote_password != null, false)
     )
     error_message = "When autopilot_config is provided, bus_remote_addr and bus_remote_password must be specified"
   }
