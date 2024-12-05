@@ -34,6 +34,7 @@ locals {
     MYSQL_ROOT_PASSWORD = var.root_password
     MYSQL_PORT = var.network.mysql_port
     INNODB_BUFFER_POOL_SIZE = var.performance.innodb_buffer_pool_size
+    BACKUP_ENABLED = var.backups_enabled
   }
 
   # Component-specific env vars

@@ -160,3 +160,9 @@ variable "tags" {
   type = map(string)
   default = {}
 }
+
+variable "backups_enabled" {
+  description = "Enable automatic backups"
+  type        = bool
+  default     = true
+}
