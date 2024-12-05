@@ -13,10 +13,10 @@ locals {
   is_cluster_mode = var.cluster == true
   proto = coalesce(var.network.enable_ssl, true) ? "https" : "http"
   http_port = coalesce(var.network.enable_ssl, true) ? 80 : coalesce(var.network.http_port, 9980)
-  s3_port = coalesce(var.network.enable_ssl, true) ? 80 : coalesce(var.network.s3_port, 9981)
+  s3_port = coalesce(var.network.enable_ssl, true) ? 80 : coalesce(var.network.s3_port, 8080)
 
   # Special case: If S3 port is 80, use 9981 internally to avoid port conflicts while maintaining external port 80
-  s3_internal_port = local.s3_port == 80 ? 9981 : local.s3_port
+  s3_internal_port = local.s3_port == 80 ? 8080 : local.s3_port
 
   # 1. Base configuration
   base_config = {
