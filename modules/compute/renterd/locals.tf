@@ -15,13 +15,16 @@ locals {
   http_port = coalesce(var.network.enable_ssl, true) ? 80 : coalesce(var.network.http_port, 9980)
   s3_port = coalesce(var.network.enable_ssl, true) ? 80 : coalesce(var.network.s3_port, 9981)
 
+  # Special case: If S3 port is 80, use 9981 internally to avoid port conflicts while maintaining external port 80
+  s3_internal_port = local.s3_port == 80 ? 9981 : local.s3_port
+
   # 1. Base configuration
   base_config = {
     name = local.is_cluster_mode ? (
       var.mode == "bus" ? "renterd-bus" :
-      var.mode == "worker" ? "renterd-worker" :
-      var.mode == "autopilot" ? "renterd-autopilot" :
-      "renterd"
+        var.mode == "worker" ? "renterd-worker" :
+          var.mode == "autopilot" ? "renterd-autopilot" :
+          "renterd"
     ) : "renterd-solo"
     image = var.image
     cpu_units = var.resources.cpu.cores
@@ -107,7 +110,8 @@ locals {
     RENTERD_WORKER_ENABLED    = "false"
     RENTERD_SEED              = var.seed
     RENTERD_HTTP_ADDRESS      = ":${local.http_port}"
-    RENTERD_S3_ADDRESS      = ":${local.http_port}"
+    # Using internal S3 port to avoid port conflicts
+    RENTERD_S3_ADDRESS        = ":${local.s3_internal_port}"
 
     # Bus-specific configurations
     RENTERD_BUS_BOOTSTRAP = tostring(coalesce(var.bus_config.bootstrap, true))
@@ -180,7 +184,8 @@ locals {
     # Non-cluster mode configuration
     RENTERD_SEED         = var.seed
     RENTERD_HTTP_ADDRESS = ":${local.http_port}"
-    RENTERD_S3_ADDRESS   = ":${local.s3_port}"
+    # Using internal S3 port to avoid port conflicts
+    RENTERD_S3_ADDRESS   = ":${local.s3_internal_port}"
     RENTERD_API_PASSWORD = var.api_password
 
     # Enable all components by default in non-cluster mode
@@ -197,8 +202,8 @@ locals {
     local.database_env_vars
   )
 
-
-  # Determine expose configuration dynamically with SSL toggle
+  # Service expose configuration with port mapping
+  # Maps internal S3 port to external port while maintaining external port 80 when specified
   service_expose = concat(
     [
       {
@@ -209,10 +214,10 @@ locals {
         accept = local.service_fqdn != null ? [local.service_fqdn] : []
       }
     ],
-    var.network.s3_enabled ? [
+      var.network.s3_enabled ? [
       {
-        port   = var.network.s3_port
-        as     = var.network.s3_port
+        port   = local.s3_internal_port  # Internal port (9981 when external is 80)
+        as     = local.s3_port          # External port (remains 80 when specified)
         global = true
         proto  = "tcp"
         accept = local.s3_fqdn != null ? [local.s3_fqdn] : []
