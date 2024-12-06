@@ -35,6 +35,7 @@ locals {
     MYSQL_PORT = var.network.mysql_port
     INNODB_BUFFER_POOL_SIZE = var.performance.innodb_buffer_pool_size
     BACKUP_ENABLED = var.backups_enabled
+    CLUSTER_MODE = var.cluster_mode
   }
 
   # Component-specific env vars

@@ -1,4 +1,11 @@
-# Core Configuration
+# Cluster Configuration
+variable "cluster_mode" {
+  description = "Enable cluster mode for MySQL instance"
+  type        = bool
+  default     = false
+}
+
+# Core Configuration  
 variable "name" {
   description = "Name for the MySQL service"
   type        = string
