@@ -39,37 +39,52 @@ module "master" {
 
   cluster_mode = true
 
-  # Instance configuration
-  server_id         = local.master_server_id
-  mysql_port        = var.mysql_port
-  root_password     = var.root_password
-  repl_user         = var.repl_user
-  repl_password     = var.repl_password
+  name = "${var.cluster_name}-master"
+  root_password = var.root_password
 
-  # Metrics configuration
-  metrics_enabled = var.metrics_enabled
-  metrics_port    = var.metrics_port
+  network = {
+    mysql_port = var.mysql_port
+  }
 
-  # Etcd configuration
-  etc_endpoints = var.etc_endpoints
-  etc_username  = var.etc_username
-  etc_password  = var.etc_password
+  metrics = {
+    enabled = var.metrics_enabled
+    port = var.metrics_port
+  }
 
-  # Resource configuration
-  cpu_units    = local.master_resources.cpu_units
-  memory_size  = local.master_resources.memory_size
-  memory_unit  = local.master_resources.memory_unit
-  storage_size = local.master_resources.storage_size
-  storage_unit = local.master_resources.storage_unit
+  etcd = {
+    endpoints = var.etc_endpoints
+    username = var.etc_username
+    password = var.etc_password
+  }
 
-  # InnoDB configuration
-  innodb_buffer_pool_size = var.master_innodb_buffer_pool_size
+  cluster = {
+    enabled = true
+    repl_user = var.repl_user
+    repl_password = var.repl_password
+    server_id = local.master_server_id
+  }
 
-  # Akash placement configuration
-  placement_strategy_name = "${var.cluster_name}-master"
-  placement_attributes    = var.master_placement_attributes
-  pricing_amount         = var.master_pricing_amount
-  allowed_providers      = var.allowed_providers
+  resources = {
+    cpu = {
+      cores = local.master_resources.cpu_units
+    }
+    memory = {
+      size = local.master_resources.memory_size
+      unit = local.master_resources.memory_unit
+    }
+    storage = {
+      size = local.master_resources.storage_size
+      unit = local.master_resources.storage_unit
+    }
+  }
+
+  performance = {
+    innodb_buffer_pool_size = var.master_innodb_buffer_pool_size
+  }
+
+  placement_attributes = var.master_placement_attributes
+  pricing_amount = var.master_pricing_amount
+  allowed_providers = var.allowed_providers
 
   # Tags
   tags = merge(local.common_tags, {
@@ -84,37 +99,52 @@ module "replicas" {
 
   cluster_mode = true
 
-  # Instance configuration
-  server_id     = each.value
-  mysql_port    = var.mysql_port
+  name = "${var.cluster_name}-replica-${each.key}"
   root_password = var.root_password
-  repl_user     = var.repl_user
-  repl_password = var.repl_password
 
-  # Metrics configuration
-  metrics_enabled = var.metrics_enabled
-  metrics_port    = var.metrics_port
+  network = {
+    mysql_port = var.mysql_port
+  }
 
-  # Etcd configuration
-  etc_endpoints = var.etc_endpoints
-  etc_username  = var.etc_username
-  etc_password  = var.etc_password
+  metrics = {
+    enabled = var.metrics_enabled
+    port = var.metrics_port
+  }
 
-  # Resource configuration
-  cpu_units    = local.replica_resources.cpu_units
-  memory_size  = local.replica_resources.memory_size
-  memory_unit  = local.replica_resources.memory_unit
-  storage_size = local.replica_resources.storage_size
-  storage_unit = local.replica_resources.storage_unit
+  etcd = {
+    endpoints = var.etc_endpoints
+    username = var.etc_username
+    password = var.etc_password
+  }
 
-  # InnoDB configuration
-  innodb_buffer_pool_size = var.replica_innodb_buffer_pool_size
+  cluster = {
+    enabled = true
+    repl_user = var.repl_user
+    repl_password = var.repl_password
+    server_id = each.value
+  }
 
-  # Akash placement configuration
-  placement_strategy_name = "${var.cluster_name}-replica-${each.key}"
-  placement_attributes    = var.replica_placement_attributes
-  pricing_amount         = var.replica_pricing_amount
-  allowed_providers      = var.allowed_providers
+  resources = {
+    cpu = {
+      cores = local.replica_resources.cpu_units
+    }
+    memory = {
+      size = local.replica_resources.memory_size
+      unit = local.replica_resources.memory_unit
+    }
+    storage = {
+      size = local.replica_resources.storage_size
+      unit = local.replica_resources.storage_unit
+    }
+  }
+
+  performance = {
+    innodb_buffer_pool_size = var.replica_innodb_buffer_pool_size
+  }
+
+  placement_attributes = var.replica_placement_attributes
+  pricing_amount = var.replica_pricing_amount
+  allowed_providers = var.allowed_providers
 
   # Tags
   tags = merge(local.common_tags, {
