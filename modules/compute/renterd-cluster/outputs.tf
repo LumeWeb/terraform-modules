@@ -6,7 +6,6 @@ output "bus" {
     host       = module.renterd_bus.provider_host
     port       = module.renterd_bus.port
     dns_fqdn   = module.renterd_bus.dns_fqdn
-    state      = module.renterd_bus.state
   }
 }
 
@@ -18,7 +17,6 @@ output "workers" {
       host       = worker.provider_host
       port       = worker.port
       dns_fqdn   = worker.dns_fqdn
-      state      = worker.state
       worker_id  = "worker-${i + 1}"
     }
   ]
@@ -31,7 +29,6 @@ output "autopilot" {
     host       = module.renterd_autopilot.provider_host
     port       = module.renterd_autopilot.port
     dns_fqdn   = module.renterd_autopilot.dns_fqdn
-    state      = module.renterd_autopilot.state
   }
 }
 
