@@ -17,7 +17,7 @@ output "workers" {
       host       = worker.provider_host
       port       = worker.port
       dns_fqdn   = worker.dns_fqdn
-      worker_id  = "worker-${i + 1}"
+      worker_id  = i + 1
     }
   ]
 }
