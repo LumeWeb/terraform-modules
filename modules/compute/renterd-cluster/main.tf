@@ -66,7 +66,7 @@ module "renterd_workers" {
   worker_config = {
     bus_remote_addr     = "${module.renterd_bus.dns_fqdn}:${module.renterd_bus.port}"
     bus_remote_password = var.bus_api_password
-    id                  = "worker-${count.index + 1}"
+    id                  = count.index + 1
     download = {
       max_memory     = "${var.worker_memory_size}Gi"
       max_concurrent = 5
