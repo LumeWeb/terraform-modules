@@ -8,14 +8,14 @@ output "master" {
   }
 }
 
-output "replicas" {
-  description = "Details of replica nodes"
+output "slaves" {
+  description = "Details of slave nodes"
   value = {
-    for id, replica in module.replicas : id => {
-      endpoint = "${replica.provider_host}:${replica.port}"
-      host     = replica.provider_host
-      port     = replica.port
-      state    = replica.state
+    for id, slave in module.slaves : id => {
+      endpoint = "${slave.provider_host}:${slave.port}"
+      host     = slave.provider_host
+      port     = slave.port
+      state    = slave.state
     }
   }
 }
@@ -23,7 +23,7 @@ output "replicas" {
 output "cluster_info" {
   description = "General cluster information"
   value = {
-    size = 1 + var.replica_count
+    size = 1 + var.slave_count
     name = var.cluster_name
     environment = var.environment
   }

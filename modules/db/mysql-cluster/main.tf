@@ -1,8 +1,8 @@
 locals {
   # Generate unique server IDs for each instance
   master_server_id = 1
-  replica_server_ids = {
-    for idx in range(var.replica_count) : idx => idx + 2
+  slave_server_ids = {
+    for idx in range(var.slave_count) : idx => idx + 2
   }
 
   # Common tags for all instances
@@ -24,12 +24,12 @@ locals {
     storage_unit = coalesce(var.master_resources.storage_unit, var.default_resources.storage_unit)
   }
 
-  replica_resources = {
-    cpu_units    = coalesce(var.replica_resources.cpu_units, var.default_resources.cpu_units)
-    memory_size  = coalesce(var.replica_resources.memory_size, var.default_resources.memory_size)
-    memory_unit  = coalesce(var.replica_resources.memory_unit, var.default_resources.memory_unit)
-    storage_size = coalesce(var.replica_resources.storage_size, var.default_resources.storage_size)
-    storage_unit = coalesce(var.replica_resources.storage_unit, var.default_resources.storage_unit)
+  slave_resources = {
+    cpu_units    = coalesce(var.slave_resources.cpu_units, var.default_resources.cpu_units)
+    memory_size  = coalesce(var.slave_resources.memory_size, var.default_resources.memory_size)
+    memory_unit  = coalesce(var.slave_resources.memory_unit, var.default_resources.memory_unit)
+    storage_size = coalesce(var.slave_resources.storage_size, var.default_resources.storage_size)
+    storage_unit = coalesce(var.slave_resources.storage_unit, var.default_resources.storage_unit)
   }
 }
 
@@ -93,13 +93,13 @@ module "master" {
 }
 
 # Deploy replica instances
-module "replicas" {
+module "slaves" {
   source   = "../mysql"
-  for_each = local.replica_server_ids
+  for_each = local.slave_server_ids
 
   cluster_mode = true
 
-  name = "${var.cluster_name}-replica-${each.key}"
+  name = "${var.cluster_name}-slave-${each.key}"
   root_password = var.root_password
 
   network = {
@@ -126,30 +126,30 @@ module "replicas" {
 
   resources = {
     cpu = {
-      cores = local.replica_resources.cpu_units
+      cores = local.slave_resources.cpu_units
     }
     memory = {
-      size = local.replica_resources.memory_size
-      unit = local.replica_resources.memory_unit
+      size = local.slave_resources.memory_size
+      unit = local.slave_resources.memory_unit
     }
     storage = {
-      size = local.replica_resources.storage_size
-      unit = local.replica_resources.storage_unit
+      size = local.slave_resources.storage_size
+      unit = local.slave_resources.storage_unit
     }
   }
 
   performance = {
-    innodb_buffer_pool_size = var.replica_innodb_buffer_pool_size
+    innodb_buffer_pool_size = var.slave_innodb_buffer_pool_size
   }
 
-  placement_attributes = var.replica_placement_attributes
-  pricing_amount = var.replica_pricing_amount
+  placement_attributes = var.slave_placement_attributes
+  pricing_amount = var.slave_pricing_amount
   allowed_providers = var.allowed_providers
 
   # Tags
   tags = merge(local.common_tags, {
-    Role      = "replica"
-    ReplicaID = each.key
+    Role    = "slave"
+    SlaveID = each.key
   })
 
   depends_on = [module.master]

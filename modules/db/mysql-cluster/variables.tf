@@ -8,14 +8,14 @@ variable "cluster_name" {
   }
 }
 
-variable "replica_count" {
-  description = "Number of replica instances to deploy"
+variable "slave_count" {
+  description = "Number of slave instances to deploy"
   type        = number
   default     = 2
 
   validation {
-    condition     = var.replica_count >= 0 && var.replica_count <= 10
-    error_message = "replica_count must be between 0 and 10"
+    condition     = var.slave_count >= 0 && var.slave_count <= 10
+    error_message = "slave_count must be between 0 and 10"
   }
 }
 
@@ -61,8 +61,8 @@ variable "master_resources" {
   default = {}
 }
 
-variable "replica_resources" {
-  description = "Resource configuration for replica instances"
+variable "slave_resources" {
+  description = "Resource configuration for slave instances"
   type = object({
     cpu_units    = optional(number)
     memory_size  = optional(number)
@@ -97,8 +97,8 @@ variable "master_innodb_buffer_pool_size" {
   default     = "1G"
 }
 
-variable "replica_innodb_buffer_pool_size" {
-  description = "InnoDB buffer pool size for replica instances"
+variable "slave_innodb_buffer_pool_size" {
+  description = "InnoDB buffer pool size for slave instances"
   type        = string
   default     = "1G"
 }
@@ -109,8 +109,8 @@ variable "master_placement_attributes" {
   default     = {}
 }
 
-variable "replica_placement_attributes" {
-  description = "Placement attributes for replica provider selection"
+variable "slave_placement_attributes" {
+  description = "Placement attributes for slave provider selection"
   type        = map(string)
   default     = {}
 }
@@ -121,8 +121,8 @@ variable "master_pricing_amount" {
   default     = 10000
 }
 
-variable "replica_pricing_amount" {
-  description = "Maximum price for replica deployments in uakt"
+variable "slave_pricing_amount" {
+  description = "Maximum price for slave deployments in uakt"
   type        = number
   default     = 10000
 }
