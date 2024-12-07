@@ -7,7 +7,7 @@ variable "environment" {
 variable "image" {
   description = "Docker image to deploy"
   type        = string
-  default     = null
+  default     = "ghcr.io/lumeweb/akash-renterd:develop"
 }
 
 variable "base_domain" {
