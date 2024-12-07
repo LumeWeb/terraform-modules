@@ -105,8 +105,8 @@ variable "etcd" {
   }
 
   validation {
-    condition     = length(var.etcd.endpoints) == 0 || can(regex("^[a-zA-Z0-9_-]+$", var.etcd.password))
-    error_message = "ETCD password must be alphanumeric with underscores and hyphens"
+    condition     = length(var.etcd.endpoints) > 0 && length(var.etcd.password) > 0
+    error_message = "ETCD password must not be empty when endpoints are provided"
   }
 }
 
