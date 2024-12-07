@@ -56,8 +56,8 @@ locals {
     # Cluster configuration
     cluster = var.cluster.enabled ? {
       CLUSTER_MODE = "true"
-      REPL_USER = var.cluster.repl_user
-      REPL_PASSWORD = var.cluster.repl_password
+      MYSQL_REPL_USERNAME = var.cluster.repl_user
+      MYSQL_REPL_PASSWORD = var.cluster.repl_password
     } : {}
   }
 
