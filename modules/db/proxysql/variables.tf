@@ -157,6 +157,13 @@ variable "mysql" {
   }
 }
 
+# Backup Configuration
+variable "backup_enabled" {
+  description = "Enable backups"
+  type        = bool
+  default     = true
+}
+
 
 # Tags
 variable "tags" {
@@ -164,3 +171,5 @@ variable "tags" {
   type        = map(string)
   default     = {}
 }
+
+
