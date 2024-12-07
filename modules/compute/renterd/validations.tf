@@ -10,8 +10,8 @@ check "bus_mode_config" {
 
 check "database_configuration" {
   assert {
-    condition = (var.mode != "bus" && var.mode != "solo") || var.database != null
-    error_message = "Database configuration is required for bus mode and solo mode"
+    condition = (!var.cluster && var.mode == "solo" && var.database != null) || (var.cluster && var.mode == "bus" && var.database != null) || (var.mode != "bus" && var.mode != "solo")
+    error_message = "Database configuration is required for bus mode (in cluster) and solo mode (non-cluster)"
   }
 }
 
