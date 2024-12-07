@@ -12,11 +12,11 @@ output "deployment" {
 output "service" {
   description = "ETCD service details"
   value = {
-    client_port  = var.ports.client
+    client_port  = module.etcd_deployment.port
     peer_port    = var.ports.peer
     metrics_port = var.ports.metrics
     endpoints    = [
-      "${module.etcd_deployment.provider_host}:${var.ports.client}"
+      "${module.etcd_deployment.provider_host}:${module.etcd_deployment.port}"
     ]
   }
 }
