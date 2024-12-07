@@ -205,7 +205,7 @@ locals {
         port   = local.http_port
         as     = local.http_port
         global = true
-        proto  = var.network.enable_ssl ? "https" : "tcp"
+        proto  = "tcp"
         accept = local.service_fqdn != null ? [local.service_fqdn] : []
       }
     ],
