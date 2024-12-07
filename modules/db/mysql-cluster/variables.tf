@@ -2,6 +2,8 @@ variable "cluster_name" {
   description = "Name of the MySQL cluster"
   type        = string
 
+  default = "mysql"
+
   validation {
     condition     = can(regex("^[a-z][a-z0-9-]*$", var.cluster_name))
     error_message = "Cluster name must be lowercase alphanumeric with hyphens"
