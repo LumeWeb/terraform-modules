@@ -94,6 +94,18 @@ variable "metrics_password" {
   sensitive   = true
 }
 
+variable "database" {
+  description = "Database configuration for renterd"
+  type = object({
+    host     = string
+    port     = number
+    name     = string
+    user     = string
+    password = string
+    ssl_mode = optional(string, "disable")
+  })
+}
+
 variable "http_port" {
   description = "HTTP port for the renterd cluster"
   type        = number

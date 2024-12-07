@@ -22,6 +22,8 @@ module "renterd_bus" {
     http_port = var.http_port
   }
 
+  database = var.database
+
   resources = {
     cpu = { cores = var.bus_cpu_cores }
     memory = {
