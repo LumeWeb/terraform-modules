@@ -1,12 +1,12 @@
 locals {
   # 1. Base configuration
   base_config = {
-    name = var.name
-    image = var.image
+    name      = var.name
+    image     = var.image
     cpu_units = var.resources.cpu.cores
     memory = {
       value = var.resources.memory.size
-      unit = var.resources.memory.unit
+      unit  = var.resources.memory.unit
     }
   }
 
@@ -15,16 +15,16 @@ locals {
     root = {
       size = {
         value = var.resources.storage.size
-        unit = var.resources.storage.unit
+        unit  = var.resources.storage.unit
       }
     }
     persistent_data = try(var.resources.persistent_storage, null) != null ? {
       size = {
         value = var.resources.persistent_storage.size
-        unit = var.resources.persistent_storage.unit
+        unit  = var.resources.persistent_storage.unit
       }
-      mount = var.resources.persistent_storage.mount
-      class = var.resources.persistent_storage.class
+      mount     = var.resources.persistent_storage.mount
+      class     = var.resources.persistent_storage.class
       read_only = false
     } : null
   }
@@ -36,7 +36,7 @@ locals {
 
   component_env_vars = {
     etcd = length(var.etcd.endpoints) > 0 ? {
-      ETCDCTL_API = "3"
+      ETCDCTL_API         = "3"
       ETCDCTL_ENDPOINTS = join(",", var.etcd.endpoints)
       ETCDCTL_USER        = "${var.etcd.username}:${var.etcd.password}"
       MYSQL_REPL_USERNAME = var.mysql.repl_user
@@ -52,38 +52,38 @@ locals {
   # 4. Service expose configuration
   service_expose = [
     {
-      port = var.ports.proxy
-      as = var.ports.proxy
+      port   = var.ports.proxy
+      as     = var.ports.proxy
       global = true
-      proto = "tcp"
+      proto  = "tcp"
     },
     {
-      port = var.ports.admin
-      as = var.ports.admin
+      port   = var.ports.admin
+      as     = var.ports.admin
       global = false
-      proto = "tcp"
+      proto  = "tcp"
     }
   ]
 
   # 5. Final service configuration
   service_config = {
-    name = local.base_config.name
-    image = local.base_config.image
+    name      = local.base_config.name
+    image     = local.base_config.image
     cpu_units = local.base_config.cpu_units
-    memory = local.base_config.memory
-    storage = local.storage_config
-    env = local.service_env_vars
-    expose = local.service_expose
+    memory    = local.base_config.memory
+    storage   = local.storage_config
+    env       = local.service_env_vars
+    expose    = local.service_expose
   }
 
   # 6. Standard tags
   common_tags = merge(
     var.tags,
     {
-      Service = "ProxySQL"
-      Component = "database"
-      Role = "proxy"
-      ManagedBy = "terraform"
+      Service     = "ProxySQL"
+      Component   = "database"
+      Role        = "proxy"
+      ManagedBy   = "terraform"
       Environment = var.environment
     }
   )
@@ -93,17 +93,17 @@ module "proxysql_deployment" {
   source = "../../compute/akash"
 
   service = local.service_config
-  
+
   placement_strategy = {
-    name = "${var.name}-placement"
+    name       = "${var.name}-placement"
     attributes = var.placement_attributes
     pricing = {
-      denom = "uakt"
+      denom  = "uakt"
       amount = var.pricing_amount
     }
   }
 
   allowed_providers = var.allowed_providers
-  environment = var.environment
-  tags = local.common_tags
+  environment       = var.environment
+  tags              = local.common_tags
 }
