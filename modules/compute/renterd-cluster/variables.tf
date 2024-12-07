@@ -85,7 +85,7 @@ variable "placement_attributes" {
 variable "enable_ssl" {
   description = "Enable SSL for the renterd cluster"
   type        = bool
-  default     = true
+  default     = false
 }
 
 variable "metrics_password" {
