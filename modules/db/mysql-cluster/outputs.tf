@@ -1,19 +1,11 @@
-output "master" {
-  description = "Master node details"
+# Outputs
+output "nodes" {
+  description = "Details of all cluster nodes"
   value = {
-    endpoint = "${module.master.provider_host}:${module.master.port}"
-    host     = module.master.provider_host
-    port     = module.master.port
-  }
-}
-
-output "slaves" {
-  description = "Details of slave nodes"
-  value = {
-    for id, slave in module.slaves : id => {
-      endpoint = "${slave.provider_host}:${slave.port}"
-      host     = slave.provider_host
-      port     = slave.port
+    for id, node in module.nodes : id => {
+      endpoint = "${node.provider_host}:${node.port}"
+      host     = node.provider_host
+      port     = node.port
     }
   }
 }
@@ -21,8 +13,8 @@ output "slaves" {
 output "cluster_info" {
   description = "General cluster information"
   value = {
-    size = 1 + var.slave_count
-    name = var.cluster_name
+    size        = var.node_count
+    name        = var.cluster_name
     environment = var.environment
   }
 }
