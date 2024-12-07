@@ -103,6 +103,11 @@ variable "etcd" {
     condition = length(var.etcd.endpoints) == 0 || can(regex("^[a-zA-Z0-9_-]+$", var.etcd.username))
     error_message = "ETCD username must be alphanumeric with underscores and hyphens"
   }
+
+  validation {
+    condition     = length(var.etcd.endpoints) == 0 || can(regex("^[a-zA-Z0-9_-]+$", var.etcd.password))
+    error_message = "ETCD password must be alphanumeric with underscores and hyphens"
+  }
 }
 
 # Akash Configuration
