@@ -1,8 +1,7 @@
 variable "cluster_name" {
   description = "Name of the MySQL cluster"
   type        = string
-
-  default = "mysql"
+  default     = "mysql"
 
   validation {
     condition     = can(regex("^[a-z][a-z0-9-]*$", var.cluster_name))
@@ -15,14 +14,14 @@ variable "environment" {
   type        = string
 }
 
-variable "slave_count" {
-  description = "Number of slave instances to deploy"
+variable "node_count" {
+  description = "Number of nodes to deploy in the cluster"
   type        = number
-  default     = 2
+  default     = 3
 
   validation {
-    condition     = var.slave_count >= 0 && var.slave_count <= 10
-    error_message = "slave_count must be between 0 and 10"
+    condition     = var.node_count >= 1 && var.node_count <= 10
+    error_message = "node_count must be between 1 and 10"
   }
 }
 
@@ -56,20 +55,8 @@ variable "repl_password" {
   sensitive   = true
 }
 
-variable "master_resources" {
-  description = "Resource configuration for master instance"
-  type = object({
-    cpu_units    = optional(number)
-    memory_size  = optional(number)
-    memory_unit  = optional(string)
-    storage_size = optional(number)
-    storage_unit = optional(string)
-  })
-  default = {}
-}
-
-variable "slave_resources" {
-  description = "Resource configuration for slave instances"
+variable "node_resources" {
+  description = "Resource configuration for cluster nodes"
   type = object({
     cpu_units    = optional(number)
     memory_size  = optional(number)
@@ -81,7 +68,7 @@ variable "slave_resources" {
 }
 
 variable "default_resources" {
-  description = "Default resource configuration for all instances"
+  description = "Default resource configuration for all nodes"
   type = object({
     cpu_units    = number
     memory_size  = number
@@ -98,38 +85,20 @@ variable "default_resources" {
   }
 }
 
-variable "master_innodb_buffer_pool_size" {
-  description = "InnoDB buffer pool size for master instance"
+variable "innodb_buffer_pool_size" {
+  description = "InnoDB buffer pool size for nodes"
   type        = string
   default     = "1G"
 }
 
-variable "slave_innodb_buffer_pool_size" {
-  description = "InnoDB buffer pool size for slave instances"
-  type        = string
-  default     = "1G"
-}
-
-variable "master_placement_attributes" {
-  description = "Placement attributes for master provider selection"
+variable "placement_attributes" {
+  description = "Placement attributes for provider selection"
   type        = map(string)
   default     = {}
 }
 
-variable "slave_placement_attributes" {
-  description = "Placement attributes for slave provider selection"
-  type        = map(string)
-  default     = {}
-}
-
-variable "master_pricing_amount" {
-  description = "Maximum price for master deployment in uakt"
-  type        = number
-  default     = 10000
-}
-
-variable "slave_pricing_amount" {
-  description = "Maximum price for slave deployments in uakt"
+variable "pricing_amount" {
+  description = "Maximum price for node deployment in uakt"
   type        = number
   default     = 10000
 }
@@ -191,4 +160,3 @@ variable "backups_enabled" {
   type        = bool
   default     = true
 }
-
