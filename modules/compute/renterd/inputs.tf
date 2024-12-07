@@ -42,23 +42,17 @@ variable "database" {
   default = null
 
   validation {
-    condition = anytrue([
-      var.database == null,
-      alltrue([
-        var.database.uri != null,
-        var.database.password != null,
-        var.database.database != null,
-        var.database.metrics_database != null
-      ])
+    condition = var.database == null ? true : alltrue([
+      var.database.uri != null,
+      var.database.password != null,
+      var.database.database != null,
+      var.database.metrics_database != null
     ])
     error_message = "When database configuration is provided, all required parameters must be set"
   }
 
   validation {
-    condition = anytrue([
-      var.database == null,
-      contains(["disable", "prefer", "require", "verify-ca", "verify-full"], var.database.ssl_mode)
-    ])
+    condition = var.database == null ? true : contains(["disable", "prefer", "require", "verify-ca", "verify-full"], var.database.ssl_mode)
     error_message = "SSL mode must be one of: disable, prefer, require, verify-ca, verify-full"
   }
 }
