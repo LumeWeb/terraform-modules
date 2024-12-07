@@ -90,14 +90,14 @@ locals {
   }
 
   # Database environment variables
-  database_env_vars = {
+  database_env_vars = var.database != null ? {
     RENTERD_DB_URI          = var.database.uri
     RENTERD_DB_USER         = var.database.user
     RENTERD_DB_PASSWORD     = var.database.password
     RENTERD_DB_NAME         = var.database.database
     RENTERD_DB_METRICS_NAME = var.database.metrics_database
     RENTERD_DB_SSL_MODE     = var.database.ssl_mode
-  }
+  } : {}
 
   # Base environment variables for bus mode
   bus_base_env_vars = {

@@ -8,6 +8,7 @@ module "renterd_bus" {
   seed         = var.seed
   api_password = var.bus_api_password
   metrics_password = var.metrics_password
+  database     = var.database
 
   allowed_providers = var.allowed_providers
 
