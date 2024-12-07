@@ -41,6 +41,7 @@ module "master" {
 
   name = "${var.cluster_name}-master"
   root_password = var.root_password
+  environment = var.environment
 
   backups_enabled = var.backups_enabled
 
@@ -103,6 +104,7 @@ module "slaves" {
 
   name = "${var.cluster_name}-slave-${each.key}"
   root_password = var.root_password
+  environment = var.environment
 
   backups_enabled = var.backups_enabled
 

@@ -10,6 +10,11 @@ variable "cluster_name" {
   }
 }
 
+variable "environment" {
+  description = "Deployment environment"
+  type        = string
+}
+
 variable "slave_count" {
   description = "Number of slave instances to deploy"
   type        = number
