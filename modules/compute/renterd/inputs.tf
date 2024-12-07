@@ -31,43 +31,29 @@ variable "dns" {
 variable "database" {
   description = "Database configuration"
   type = object({
-    type = optional(string, "sqlite")
-    
-    # SQLite specific
-    sqlite_path = optional(string, "/data/db/renterd.sqlite")
-    sqlite_metrics_path = optional(string, "/data/db/renterd_metrics.sqlite")
-    
-    # MySQL specific
-    mysql_uri = optional(string)
-    mysql_user = optional(string, "root")
-    mysql_password = optional(string)
-    mysql_database = optional(string, "renterd")
-    mysql_metrics_database = optional(string, "renterd_metrics")
+    type = optional(string, "mysql")
+    uri = optional(string)
+    user = optional(string, "root") 
+    password = string
+    database = optional(string, "renterd")
+    metrics_database = optional(string, "renterd_metrics")
+    ssl_mode = optional(string, "disable")
   })
-  default = {}
 
   validation {
-    condition = contains(["sqlite", "mysql"], var.database.type)
-    error_message = "Database type must be either 'sqlite' or 'mysql'"
+    condition = alltrue([
+      var.database.uri != null,
+      var.database.user != null,
+      var.database.password != null,
+      var.database.database != null,
+      var.database.metrics_database != null
+    ])
+    error_message = "All MySQL configuration parameters must be provided"
   }
 
   validation {
-    condition = var.database.type != "sqlite" || (
-      can(regex("^(/[^/]+)+$", var.database.sqlite_path)) &&
-      can(regex("^(/[^/]+)+$", var.database.sqlite_metrics_path))
-    )
-    error_message = "SQLite paths must be absolute paths"
-  }
-
-  validation {
-    condition = var.database.type != "mysql" || (
-      var.database.mysql_uri != null &&
-      var.database.mysql_user != null &&
-      var.database.mysql_password != null &&
-      var.database.mysql_database != null &&
-      var.database.mysql_metrics_database != null
-    )
-    error_message = "When using MySQL, all MySQL configuration parameters must be provided"
+    condition = contains(["disable", "prefer", "require", "verify-ca", "verify-full"], var.database.ssl_mode)
+    error_message = "SSL mode must be one of: disable, prefer, require, verify-ca, verify-full"
   }
 }
 

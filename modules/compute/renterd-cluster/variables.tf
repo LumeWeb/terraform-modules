@@ -95,15 +95,32 @@ variable "metrics_password" {
 }
 
 variable "database" {
-  description = "Database configuration for renterd"
+  description = "Database configuration"
   type = object({
-    host     = string
-    port     = number
-    name     = string
-    user     = string
+    type = optional(string, "mysql")
+    uri = optional(string)
+    user = optional(string, "root") 
     password = string
+    database = optional(string, "renterd")
+    metrics_database = optional(string, "renterd_metrics")
     ssl_mode = optional(string, "disable")
   })
+
+  validation {
+    condition = alltrue([
+      var.database.uri != null,
+      var.database.user != null,
+      var.database.password != null,
+      var.database.database != null,
+      var.database.metrics_database != null
+    ])
+    error_message = "All MySQL configuration parameters must be provided"
+  }
+
+  validation {
+    condition = contains(["disable", "prefer", "require", "verify-ca", "verify-full"], var.database.ssl_mode)
+    error_message = "SSL mode must be one of: disable, prefer, require, verify-ca, verify-full"
+  }
 }
 
 variable "http_port" {

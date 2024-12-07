@@ -90,18 +90,13 @@ locals {
   }
 
   # Database environment variables
-  database_env_vars = var.database.type == "sqlite" ? {
-    RENTERD_DB_PATH         = coalesce(var.database.sqlite_path, "/data/db/renterd.sqlite")
-    RENTERD_DB_METRICS_PATH = coalesce(var.database.sqlite_metrics_path, "/data/db/renterd_metrics.sqlite")
-  } : var.database.type == "mysql" && var.database.mysql_uri != null ? {
-    RENTERD_DB_URI          = var.database.mysql_uri
-    RENTERD_DB_USER         = coalesce(var.database.mysql_user, "renterd")
-    RENTERD_DB_PASSWORD     = var.database.mysql_password
-    RENTERD_DB_NAME         = coalesce(var.database.mysql_database, "renterd")
-    RENTERD_DB_METRICS_NAME = coalesce(var.database.mysql_metrics_database, "renterd_metrics")
-  } : {
-    RENTERD_DB_PATH         = "/data/db/renterd.sqlite"
-    RENTERD_DB_METRICS_PATH = "/data/db/renterd_metrics.sqlite"
+  database_env_vars = {
+    RENTERD_DB_URI          = var.database.uri
+    RENTERD_DB_USER         = var.database.user
+    RENTERD_DB_PASSWORD     = var.database.password
+    RENTERD_DB_NAME         = var.database.database
+    RENTERD_DB_METRICS_NAME = var.database.metrics_database
+    RENTERD_DB_SSL_MODE     = var.database.ssl_mode
   }
 
   # Base environment variables for bus mode
