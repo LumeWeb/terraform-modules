@@ -10,12 +10,8 @@ check "bus_mode_config" {
 
 check "database_configuration" {
   assert {
-    condition = (!var.cluster && var.mode == "solo") || 
-                (var.cluster && var.mode != "bus") || 
-                (var.database != null && 
-                 var.database.uri != null && 
-                 var.database.password != null)
-    error_message = "Database configuration is required when running in cluster mode as a bus node"
+    condition = var.database != null
+    error_message = "Database configuration is required"
   }
 }
 

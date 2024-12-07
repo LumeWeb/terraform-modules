@@ -41,14 +41,11 @@ variable "database" {
   })
 
   validation {
-    condition = var.mode != "bus" || (
-      var.database.uri != null &&
-      var.database.user != null &&
-      var.database.password != null &&
-      var.database.database != null &&
-      var.database.metrics_database != null
-    )
-    error_message = "All MySQL configuration parameters must be provided when in bus mode"
+    condition = var.database.uri != null && 
+                var.database.password != null && 
+                var.database.database != null && 
+                var.database.metrics_database != null
+    error_message = "Required database configuration parameters must be provided"
   }
 
   validation {
