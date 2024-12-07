@@ -34,24 +34,25 @@ variable "database" {
     type = optional(string, "mysql")
     uri = optional(string)
     user = optional(string, "root") 
-    password = string
+    password = optional(string)
     database = optional(string, "renterd")
     metrics_database = optional(string, "renterd_metrics")
     ssl_mode = optional(string, "disable")
   })
+  default = null
 
   validation {
-    condition = alltrue([
+    condition = var.database == null || alltrue([
       var.database.uri != null,
       var.database.password != null,
       var.database.database != null,
       var.database.metrics_database != null
     ])
-    error_message = "Required database configuration parameters must be provided"
+    error_message = "When database configuration is provided, all required parameters must be set"
   }
 
   validation {
-    condition = contains(["disable", "prefer", "require", "verify-ca", "verify-full"], var.database.ssl_mode)
+    condition = var.database == null || contains(["disable", "prefer", "require", "verify-ca", "verify-full"], var.database.ssl_mode)
     error_message = "SSL mode must be one of: disable, prefer, require, verify-ca, verify-full"
   }
 }

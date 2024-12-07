@@ -10,8 +10,8 @@ check "bus_mode_config" {
 
 check "database_configuration" {
   assert {
-    condition = var.database != null
-    error_message = "Database configuration is required"
+    condition = (var.mode != "bus" && var.mode != "solo") || var.database != null
+    error_message = "Database configuration is required for bus mode and solo mode"
   }
 }
 
