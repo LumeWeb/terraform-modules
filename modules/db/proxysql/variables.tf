@@ -137,6 +137,27 @@ variable "allowed_providers" {
   }
 }
 
+# MYSQL Configuration
+
+variable "mysql" {
+  description = "MySQL configuration"
+  type = object({
+    repl_user = optional(string, "repl")
+    repl_password = optional(string)
+  })
+
+  validation {
+    condition = var.mysql.repl_password != null
+    error_message = "Replication password must be set"
+  }
+
+  validation {
+    condition = can(regex("^[a-zA-Z0-9_-]+$", var.mysql.repl_user))
+    error_message = "Replication username must be alphanumeric with underscores and hyphens"
+  }
+}
+
+
 # Tags
 variable "tags" {
   description = "Resource tags"
