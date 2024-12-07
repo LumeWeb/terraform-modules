@@ -31,12 +31,6 @@ variable "mysql_port" {
   default     = 3306
 }
 
-variable "mysql_image" {
-  description = "Custom MySQL/Percona image to use"
-  type        = string
-  default     = null
-}
-
 variable "root_password" {
   description = "MySQL root password"
   type        = string
