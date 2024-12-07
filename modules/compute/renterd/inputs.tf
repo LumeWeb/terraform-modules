@@ -41,10 +41,12 @@ variable "database" {
   })
 
   validation {
-    condition = var.database.uri != null && 
-                var.database.password != null && 
-                var.database.database != null && 
-                var.database.metrics_database != null
+    condition = alltrue([
+      var.database.uri != null,
+      var.database.password != null,
+      var.database.database != null,
+      var.database.metrics_database != null
+    ])
     error_message = "Required database configuration parameters must be provided"
   }
 
