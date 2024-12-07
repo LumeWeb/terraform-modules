@@ -112,8 +112,10 @@ module "renterd_autopilot" {
     http_port = var.http_port
   }
 
+  database = var.database
+
   autopilot_config = {
-    bus_remote_addr     ="${module.renterd_bus.dns_fqdn}:${module.renterd_bus.port}"
+    bus_remote_addr     = "${module.renterd_bus.dns_fqdn}:${module.renterd_bus.port}"
     bus_remote_password = var.bus_api_password
     worker_remote_addrs = module.renterd_workers[*].dns_fqdn
     worker_api_password = var.worker_api_password
