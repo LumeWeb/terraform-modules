@@ -44,14 +44,14 @@ locals {
     } : {}
   }
 
-  baxkup_env_vars = !var.backup_enabled ? {
+  backup_env_vars = !var.backup_enabled ? {
     BACKUP_ENABLED = "false"
   } : {}
 
   service_env_vars = merge(
     local.base_env_vars,
     local.component_env_vars.etcd,
-    local.baxkup_env_vars
+    local.backup_env_vars
   )
 
   # 4. Service expose configuration
