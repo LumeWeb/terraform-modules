@@ -124,4 +124,11 @@ variable "tags" {
   description = "Resource tags"
   type        = map(string)
   default     = {}
+}
+
+variable "extra_env_vars" {
+  description = "Additional environment variables for portal configuration and plugins"
+  type        = map(string)
+  default     = {}
+  sensitive   = true
 } 

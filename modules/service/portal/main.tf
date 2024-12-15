@@ -50,6 +50,9 @@ locals {
     PORTAL_CORE_DB_NAME = var.database.name
   }
 
+  # Final environment variables including extras
+  final_env_vars = merge(local.base_env_vars, local.db_env_vars, var.extra_env_vars)
+
   # Service expose configuration
   service_expose = [
     {
@@ -76,7 +79,7 @@ locals {
     image = local.base_config.image
     cpu_units = local.base_config.cpu_units
     memory = local.base_config.memory
-    env = merge(local.base_env_vars, local.db_env_vars)
+    env = local.final_env_vars
     expose = local.service_expose
   }
 
