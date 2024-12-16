@@ -143,6 +143,12 @@ variable "etc_password" {
   sensitive   = true
 }
 
+variable "etc_prefix" {
+  description = "Prefix for etcd keys"
+  type        = string
+  default     = "/discovery/mysql"
+}
+
 variable "tags" {
   description = "Additional resource tags"
   type        = map(string)

@@ -76,11 +76,17 @@ variable "cluster" {
 variable "etcd" {
   description = "ETCD configuration"
   type = object({
-    endpoints = optional(list(string), [])
-    username = optional(string, "root")
-    password = optional(string)
+    endpoints = list(string)
+    username  = string
+    password  = string
+    prefix    = string
   })
-  default = {}
+  default = {
+    endpoints = []
+    username  = ""
+    password  = ""
+    prefix    = "/discovery/mysql"
+  }
 }
 
 # Resource Configuration

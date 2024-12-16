@@ -22,6 +22,9 @@ locals {
     storage_size = coalesce(var.node_resources.storage_size, var.default_resources.storage_size)
     storage_unit = coalesce(var.node_resources.storage_unit, var.default_resources.storage_unit)
   }
+
+  # Create a prefix for etcd keys
+  etcd_prefix = "${var.etc_prefix}/${var.cluster_name}"
 }
 
 # Deploy cluster nodes
@@ -50,6 +53,7 @@ module "nodes" {
     endpoints = var.etc_endpoints
     username = var.etc_username
     password = var.etc_password
+    prefix = local.etcd_prefix
   }
 
   cluster = {
