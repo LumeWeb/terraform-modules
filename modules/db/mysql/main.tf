@@ -6,7 +6,7 @@ locals {
     cpu_units = var.resources.cpu.cores
     memory = {
       value = var.resources.memory.size
-      unit = var.resources.memory.unit
+      unit  = var.resources.memory.unit
     }
   }
 
@@ -15,27 +15,27 @@ locals {
     root = {
       size = {
         value = var.resources.storage.size
-        unit = var.resources.storage.unit
+        unit  = var.resources.storage.unit
       }
     }
     persistent_data = {
       size = {
         value = var.resources.persistent_storage.size
-        unit = var.resources.persistent_storage.unit
+        unit  = var.resources.persistent_storage.unit
       }
-      mount = "/var/lib/mysql"
-      class = var.resources.persistent_storage.class
+      mount     = "/var/lib/mysql"
+      class     = var.resources.persistent_storage.class
       read_only = false
     }
   }
 
   # 3. Environment variables - Core MySQL
   base_env_vars = {
-    MYSQL_ROOT_PASSWORD = var.root_password
-    MYSQL_PORT = var.network.mysql_port
+    MYSQL_ROOT_PASSWORD     = var.root_password
+    MYSQL_PORT              = var.network.mysql_port
     INNODB_BUFFER_POOL_SIZE = var.performance.innodb_buffer_pool_size
-    BACKUP_ENABLED = var.backups_enabled
-    CLUSTER_MODE = var.cluster_mode
+    BACKUP_ENABLED          = var.backups_enabled
+    CLUSTER_MODE            = var.cluster_mode
   }
 
   # Component-specific env vars
@@ -45,7 +45,7 @@ locals {
       ETCDCTL_ENDPOINTS = join(",", var.etcd.endpoints)
       ETC_USERNAME = var.etcd.username
       ETC_PASSWORD = var.etcd.password
-      ETC_PREFIX = var.cluster_mode ? var.etcd.prefix
+      ETC_PREFIX   = var.etcd.prefix
     } : {}
 
     # Metrics configuration
@@ -56,7 +56,7 @@ locals {
 
     # Cluster configuration
     cluster = var.cluster.enabled ? {
-      CLUSTER_MODE = "true"
+      CLUSTER_MODE        = "true"
       MYSQL_REPL_USERNAME = var.cluster.repl_user
       MYSQL_REPL_PASSWORD = var.cluster.repl_password
     } : {}
@@ -73,37 +73,41 @@ locals {
   # 4. Service expose configuration
   service_expose = concat(
     # Main MySQL port
-    [{
-      port = var.network.mysql_port
-      global = true
-      proto = "tcp"
-    }],
+    [
+      {
+        port   = var.network.mysql_port
+        global = true
+        proto  = "tcp"
+      }
+    ],
     # Optional metrics port
-    var.metrics.enabled ? [{
-      port = var.metrics.port
-      global = true
-      proto = "tcp"
-    }] : []
+      var.metrics.enabled ? [
+      {
+        port   = var.metrics.port
+        global = true
+        proto  = "tcp"
+      }
+    ] : []
   )
 
   # 5. Final service configuration
   service_config = {
-    name = local.base_config.name
-    image = local.base_config.image
+    name      = local.base_config.name
+    image     = local.base_config.image
     cpu_units = local.base_config.cpu_units
-    memory = local.base_config.memory
-    storage = local.storage_config
-    env = local.service_env_vars
-    expose = local.service_expose
+    memory    = local.base_config.memory
+    storage   = local.storage_config
+    env       = local.service_env_vars
+    expose    = local.service_expose
   }
 
   # 6. Standard tags
   common_tags = merge(
     var.tags,
     {
-      Service = "MySQL"
-      Engine = "Percona"
-      Role = var.cluster.enabled ? "cluster-node" : "standalone"
+      Service   = "MySQL"
+      Engine    = "Percona"
+      Role      = var.cluster.enabled ? "cluster-node" : "standalone"
       Component = "database"
       ManagedBy = "terraform"
     }
@@ -114,17 +118,17 @@ module "mysql_deployment" {
   source = "../../compute/akash"
 
   service = local.service_config
-  
+
   placement_strategy = {
-    name = "${var.name}-placement"
+    name       = "${var.name}-placement"
     attributes = var.placement_attributes
     pricing = {
-      denom = "uakt"
+      denom  = "uakt"
       amount = var.pricing_amount
     }
   }
 
   allowed_providers = var.allowed_providers
-  environment = var.environment
-  tags = local.common_tags
+  environment       = var.environment
+  tags              = local.common_tags
 }
