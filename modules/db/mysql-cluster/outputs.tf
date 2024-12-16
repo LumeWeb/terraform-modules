@@ -18,3 +18,8 @@ output "cluster_info" {
     environment = var.environment
   }
 }
+
+output "cluster_prefix" {
+  description = "Prefix for etcd keys"
+  value = local.etcd_prefix
+}
