@@ -45,7 +45,7 @@ locals {
       ETCDCTL_ENDPOINTS = join(",", var.etcd.endpoints)
       ETC_USERNAME = var.etcd.username
       ETC_PASSWORD = var.etcd.password
-      ETC_PREFIX = var.cluster_mode ? var.etcd.prefix : "${var.etcd.prefix}/${var.name}"
+      ETC_PREFIX = var.cluster_mode ? var.etcd.prefix
     } : {}
 
     # Metrics configuration
