@@ -96,6 +96,7 @@ variable "etcd" {
     endpoints = optional(list(string), [])
     username = optional(string, "root")
     password = optional(string, "")
+    prefix = optional(string, "/discovery/mysql")
   })
   default = {}
 
@@ -164,6 +165,12 @@ variable "backup_enabled" {
   default     = true
 }
 
+# Cluster Configuration
+variable "cluster_mode" {
+  description = "Enable cluster mode for ProxySQL instance"
+  type        = bool
+  default     = false
+}
 
 # Tags
 variable "tags" {

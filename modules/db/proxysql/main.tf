@@ -41,6 +41,7 @@ locals {
       ETCDCTL_USER        = "${var.etcd.username}:${var.etcd.password}"
       MYSQL_REPL_USERNAME = var.mysql.repl_user
       MYSQL_REPL_PASSWORD = var.mysql.repl_password
+      ETC_PREFIX       = var.cluster_mode ? var.etcd.prefix : "${var.etcd.prefix}/${var.name}"
     } : {}
   }
 
