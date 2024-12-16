@@ -102,7 +102,7 @@ variable "resources" {
       size = optional(number, 10)
       unit = optional(string, "Gi")
       class = optional(string, "beta3")
-      mount = optional(string, "/var/lib/mysql")
+      mount = optional(string, "/var/lib/data")
     }), {})
   })
   default = {}
