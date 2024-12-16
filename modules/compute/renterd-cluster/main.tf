@@ -1,6 +1,7 @@
 module "renterd_bus" {
   source = "../renterd"
 
+  name         = "${var.name}-cluster"
   cluster      = true
   image        = var.image
   mode         = "bus"
@@ -43,6 +44,7 @@ module "renterd_workers" {
   count  = var.worker_count
   depends_on = [module.renterd_bus]
 
+  name         = "${var.name}-cluster"
   cluster      = true
   image        = var.image
   mode         = "worker"
@@ -92,6 +94,7 @@ module "renterd_autopilot" {
   source = "../renterd"
   depends_on = [module.renterd_workers]
 
+  name         = "${var.name}-cluster"
   cluster      = true
   image        = var.image
   mode         = "autopilot"

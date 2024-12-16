@@ -21,11 +21,11 @@ locals {
   # 1. Base configuration
   base_config = {
     name = local.is_cluster_mode ? (
-      var.mode == "bus" ? "renterd-bus" :
-        var.mode == "worker" ? "renterd-worker" :
-          var.mode == "autopilot" ? "renterd-autopilot" :
-          "renterd"
-    ) : "renterd-solo"
+      var.mode == "bus" ? "${var.name}-bus" :
+        var.mode == "worker" ? "${var.name}-worker" :
+          var.mode == "autopilot" ? "${var.name}-autopilot" :
+          var.name
+    ) : "${var.name}-solo"
     image = var.image
     cpu_units = var.resources.cpu.cores
     memory = {
@@ -36,11 +36,11 @@ locals {
 
   # Service FQDN determination
   service_fqdn = var.cluster ? (
-    var.mode == "bus" ? "${coalesce(var.dns.bus_prefix, "bus")}.${var.dns.base_domain}" :
-      var.mode == "worker" ? "${coalesce(var.dns.worker_prefix, "worker")}.${var.dns.base_domain}" :
-        var.mode == "autopilot" ? "${coalesce(var.dns.autopilot_prefix, "autopilot")}.${var.dns.base_domain}" :
+    var.mode == "bus" ? "${coalesce(var.dns.bus_prefix, var.name)}.${var.dns.base_domain}" :
+      var.mode == "worker" ? "${coalesce(var.dns.worker_prefix, var.name)}.${var.dns.base_domain}" :
+        var.mode == "autopilot" ? "${coalesce(var.dns.autopilot_prefix, var.name)}.${var.dns.base_domain}" :
         null
-  ) : "${coalesce(var.dns.solo_prefix, "renterd")}.${var.dns.base_domain}"
+  ) : "${coalesce(var.dns.solo_prefix, var.name)}.${var.dns.base_domain}"
 
   s3_fqdn = var.network.s3_enabled ? "s3.${local.service_fqdn}" : null
 

@@ -1,4 +1,3 @@
-
 variable "environment" {
   description = "Environment name (e.g. dev, staging, prod)"
   type        = string
@@ -139,4 +138,10 @@ variable "http_port" {
   description = "HTTP port for the renterd cluster"
   type        = number
   default     = 80
+}
+
+variable "name" {
+  description = "renterd cluster name"
+  type        = string
+  default     = "renterd"
 }

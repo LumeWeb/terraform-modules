@@ -1,3 +1,9 @@
+variable "name" {
+  description = "Name for the renterd deployment"
+  type        = string
+  default     = "renterd"
+}
+
 variable "network" {
   description = "Network configuration"
   type = object({
