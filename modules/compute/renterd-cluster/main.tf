@@ -123,9 +123,9 @@ module "renterd_autopilot" {
   }
 
   resources = {
-    cpu = { cores = 1 }
+    cpu = { cores = var.autopilot_cpu_cores }
     memory = {
-      size = 1
+      size = var.autopilot_memory_size
       unit = "Gi"
     }
   }

@@ -64,6 +64,18 @@ variable "bus_storage_size" {
   default     = 60
 }
 
+variable "autopilot_cpu_cores" {
+  description = "Number of CPU cores for autopilot node"
+  type        = number
+  default     = 1
+}
+
+variable "autopilot_memory_size" {
+  description = "Memory size in GB for autopilot node"
+  type        = number
+  default     = 1
+}
+
 variable "worker_cpu_cores" {
   description = "Number of CPU cores per worker"
   type        = number
