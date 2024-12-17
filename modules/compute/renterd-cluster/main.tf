@@ -59,6 +59,7 @@ module "renterd_workers" {
 
   dns = {
     base_domain = var.base_domain
+    worker_id    = count.index + 1
   }
 
   network = {
