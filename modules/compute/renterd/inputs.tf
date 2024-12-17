@@ -30,7 +30,8 @@ variable "dns" {
     bus_prefix = optional(string, "bus")
     worker_prefix = optional(string, "worker")
     autopilot_prefix = optional(string, "autopilot")
-    solo_prefix = optional(string, "renterd")
+    solo_prefix = optional(string, "solo")
+    worker_id = optional(string, "1")
   })
 }
 

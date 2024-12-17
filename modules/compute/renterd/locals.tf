@@ -36,11 +36,11 @@ locals {
 
   # Service FQDN determination
   service_fqdn = var.cluster ? (
-    var.mode == "bus" ? "${coalesce(var.dns.bus_prefix, var.name)}.${var.dns.base_domain}" :
-      var.mode == "worker" ? "${coalesce(var.dns.worker_prefix, var.name)}.${var.dns.base_domain}" :
-        var.mode == "autopilot" ? "${coalesce(var.dns.autopilot_prefix, var.name)}.${var.dns.base_domain}" :
+    var.mode == "bus" ? "${var.dns.bus_prefix}.${var.name}.${var.dns.base_domain}" :
+      var.mode == "worker" ? "${var.dns.worker_prefix}-${var.dns.worker_id}.${var.name}.${var.dns.base_domain}" :
+        var.mode == "autopilot" ? "${var.dns.autopilot_prefix}.${var.name}.${var.dns.base_domain}" :
         null
-  ) : "${coalesce(var.dns.solo_prefix, var.name)}.${var.dns.base_domain}"
+  ) : "${var.name}-${var.dns.solo_prefix}.${var.dns.base_domain}"
 
   s3_fqdn = var.network.s3_enabled ? "s3.${local.service_fqdn}" : null
 
