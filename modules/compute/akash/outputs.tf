@@ -85,9 +85,18 @@ output "dns_fqdn" {
 output "provider_host" {
   description = "Provider-generated hostname"
   value = try(
-      length([for uri in akash_deployment.service.services[0].uris : uri if !local.is_accepted_uri[uri]]) > 0 ?
-      [for uri in akash_deployment.service.services[0].uris : uri if !local.is_accepted_uri[uri]][0] :
-      akash_deployment.service.services[0].forwarded_ports[0].host,
+    coalesce(
+      # First try to get provider hostname from URIs
+      try(
+        [
+          for uri in akash_deployment.service.services[0].uris : uri 
+          if contains(split(".", uri), "ingress") || contains(split(".", uri), "provider")
+        ][0],
+        null
+      ),
+      # Fallback to forwarded ports host if no matching URI
+      try(akash_deployment.service.services[0].forwarded_ports[0].host, "")
+    ),
     ""
   )
 }
