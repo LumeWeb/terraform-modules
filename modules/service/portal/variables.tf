@@ -107,7 +107,7 @@ variable "database" {
 variable "redis" {
   description = "Redis configuration"
   type = object({
-    endpoint = string
+    address = string
     password = string
   })
   sensitive = true

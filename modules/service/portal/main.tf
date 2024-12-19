@@ -40,7 +40,7 @@ locals {
     PORTAL_CORE_DB_TYPE = var.database.type
 
     # Redis
-    PORTAL_CORE_CLUSTERED_REDIS_ENDPOINT = var.redis.endpoint
+    PORTAL_CORE_CLUSTERED_REDIS_ADDRESS = var.redis.address
     PORTAL_CORE_CLUSTERED_REDIS_PASSWORD = var.redis.password
 
     # Etcd
