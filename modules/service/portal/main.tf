@@ -77,6 +77,7 @@ locals {
     {
       port = 443
       as   = 443
+      global = true
       ip   = "default"
     }
   ]
