@@ -2,7 +2,7 @@ terraform {
   required_providers {
     akash = {
       source = "registry.terraform.io/lumeweb/akash"
-      version = "0.1.2"
+      version = "0.1.3"
     }
   }
 }

@@ -36,7 +36,7 @@ locals {
         ] : []
         as = try(coalesce(port.as, port.port), port.port)
       },
-        lower(port.proto) != "http" ? { protocol = port.proto } : {},  # Changed from proto to protocol
+        lower(port.proto) != "http" ? { protocol = port.proto } : {},
       try(length(coalesce(port.accept, [])) > 0 ? { accept = port.accept } : {}, {}),
     )
   ] : null
