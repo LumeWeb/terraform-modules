@@ -28,15 +28,18 @@ locals {
     for port in var.service.expose : merge(
       {
         port = port.port
-        to = port.global ? [{ global = true }] : []
+        to = port.global ? [
+          merge(
+            { global = true },
+            try(port.ip != null ? { ip = port.ip } : {}, {})
+          )
+        ] : []
         as = try(coalesce(port.as, port.port), port.port)
       },
         lower(port.proto) != "http" ? { proto = port.proto } : {},
       try(length(coalesce(port.accept, [])) > 0 ? { accept = port.accept } : {}, {}),
-      try(length(coalesce(port.to, [])) > 0 ? { to = port.to } : {}, {})
     )
   ] : null
-
   # Service storage configuration
   service_storage = try(var.service.storage.persistent_data, null) != null ? {
     data = {

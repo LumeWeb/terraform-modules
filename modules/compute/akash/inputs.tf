@@ -1,11 +1,11 @@
 variable "service" {
   description = "Single service deployment configuration"
   type = object({
-    name      = string
-    image     = string
-    count     = optional(number, 1)
+    name  = string
+    image = string
+    count = optional(number, 1)
     cpu_units = optional(number, 2)
-    memory    = object({
+    memory = object({
       value = number
       unit  = string
     })
@@ -13,12 +13,12 @@ variable "service" {
       root = optional(object({
         size = object({
           value = optional(number, 1)
-          unit  = optional(string, "Gi")
+          unit = optional(string, "Gi")
         })
       }), {
         size = {
           value = 1
-          unit = "Gi"
+          unit  = "Gi"
         }
       })
       persistent_data = optional(object({
@@ -34,21 +34,18 @@ variable "service" {
       root = {
         size = {
           value = 1
-          unit = "Gi"
+          unit  = "Gi"
         }
       }
     })
-    env       = optional(map(string), {})
-    expose    = optional(list(object({
-      port     = number
-      as       = optional(number)
-      proto    = optional(string, "tcp")
-      global   = optional(bool, false)
-      accept   = optional(list(string))
-      to       = optional(list(object({
-        global = optional(bool, false)
-        ip     = optional(string)
-      })))
+    env = optional(map(string), {})
+    expose = optional(list(object({
+      port = number
+      as = optional(number)
+      proto = optional(string, "tcp")
+      global = optional(bool, false)
+      accept = optional(list(string))
+      ip = optional(string)
     })), [])
   })
 
@@ -58,12 +55,12 @@ variable "service" {
   }
 
   validation {
-    condition = coalesce(var.service.cpu_units, 2) >= 1 && coalesce(var.service.cpu_units, 2) <= 32
+    condition     = coalesce(var.service.cpu_units, 2) >= 1 && coalesce(var.service.cpu_units, 2) <= 32
     error_message = "CPU units must be between 1 and 32"
   }
 
   validation {
-    condition = coalesce(var.service.count, 1) >= 1 && coalesce(var.service.count, 1) <= 20
+    condition     = coalesce(var.service.count, 1) >= 1 && coalesce(var.service.count, 1) <= 20
     error_message = "Service count must be between 1 and 20"
   }
 
@@ -111,7 +108,7 @@ variable "service" {
 variable "placement_strategy" {
   description = "Placement strategy configuration"
   type = object({
-    name       = string
+    name = string
     attributes = optional(map(string), {})
     pricing = object({
       denom  = string
@@ -127,7 +124,7 @@ variable "placement_strategy" {
 
 variable "allowed_providers" {
   description = "List of allowed Akash provider addresses"
-  type        = list(string)
+  type = list(string)
 
   validation {
     condition = alltrue([
@@ -158,14 +155,14 @@ variable "debug" {
 
 variable "tags" {
   description = "Resource tags"
-  type        = map(string)
-  default     = {}
+  type = map(string)
+  default = {}
 }
 
 variable "ip_endpoints" {
   description = "IP endpoints configuration"
-  type        = map(object({
+  type = map(object({
     kind = string
   }))
-  default     = {}
+  default = {}
 }
