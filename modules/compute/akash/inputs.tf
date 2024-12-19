@@ -85,14 +85,14 @@ variable "service" {
   }
 
   validation {
-    condition = var.service.storage.persistent_data == null || (
+    condition = var.service.storage.persistent_data == null ? true : (
     can(regex("^(/[^/]+)+$", coalesce(var.service.storage.persistent_data.mount, "/data")))
     )
     error_message = "Invalid mount path format. Must be an absolute path"
   }
 
   validation {
-    condition = var.service.storage.persistent_data == null || (
+    condition = var.service.storage.persistent_data == null ? true : (
     contains(["beta1", "beta2", "beta3"], coalesce(var.service.storage.persistent_data.class, "beta3"))
     )
     error_message = "Invalid storage class. Must be one of: beta1, beta2, beta3"
@@ -101,8 +101,8 @@ variable "service" {
   validation {
     condition = contains(["Ki", "Mi", "Gi", "Ti"], var.service.memory.unit) && (
     contains(["Ki", "Mi", "Gi", "Ti"], coalesce(var.service.storage.root.size.unit, "Gi")) &&
-    (var.service.storage.persistent_data == null ||
-    contains(["Ki", "Mi", "Gi", "Ti"], coalesce(var.service.storage.persistent_data.size.unit, "Gi")))
+    (var.service.storage.persistent_data == null ? true :
+      contains(["Ki", "Mi", "Gi", "Ti"], var.service.storage.persistent_data.size.unit))
     )
     error_message = "Memory and storage units must be one of: Ki, Mi, Gi, Ti"
   }
