@@ -103,6 +103,24 @@ variable "database" {
   }
 }
 
+# Etcd Configuration
+variable "etcd" {
+  description = "Etcd configuration"
+  type = object({
+    endpoints = list(string)
+    username  = string
+    password  = string
+  })
+  sensitive = true
+}
+
+# Cluster Configuration
+variable "cluster" {
+  description = "Cluster configuration"
+  type        = bool
+  default     = false
+}
+
 # Common variables from guidelines
 variable "environment" {
   description = "Deployment environment"
@@ -132,4 +150,4 @@ variable "extra_env_vars" {
   type        = map(string)
   default     = {}
   sensitive   = true
-} 
+}

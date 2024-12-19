@@ -38,6 +38,14 @@ locals {
 
     # Database
     PORTAL_CORE_DB_TYPE = var.database.type
+
+    # Etcd
+    PORTAL_CORE_CLUSTERED_ETCD_ENDPOINTS = join(",", var.etcd.endpoints)
+    PORTAL_CORE__CLUSTERED_ETCD_USERNAME = var.etcd.username
+    PORTAL_CORE__CLUSTERED_ETCD_PASSWORD = var.etcd.password
+
+    # Cluster
+    PORTAL_CORE_CLUSTERED_ENABLED = var.cluster ? "true" : "false"
   }
 
   # Add conditional database environment variables
