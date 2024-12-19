@@ -58,6 +58,7 @@ variable "mail" {
     username = string
     password = string
     from     = string
+    ssl      = optional(bool, false)
   })
   sensitive = true
 }

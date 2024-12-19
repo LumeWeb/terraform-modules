@@ -22,6 +22,7 @@ locals {
     PORTAL_CORE_MAIL_USERNAME = var.mail.username
     PORTAL_CORE_MAIL_PASSWORD = var.mail.password
     PORTAL_CORE_MAIL_FROM = var.mail.from
+    PORTAL_CORE_MAIL_SSL = var.mail.ssl ? "true" : "false"
 
     # S3 Storage
     PORTAL_CORE_STORAGE_S3_BUFFER_BUCKET = var.storage.s3.buffer_bucket
