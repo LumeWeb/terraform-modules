@@ -83,6 +83,13 @@ locals {
     expose = local.service_expose
   }
 
+  # IP Endpoints configuration
+  ip_endpoints = {
+    default = {
+      kind = "ip"
+    }
+  }
+
   # Common tags
   common_tags = merge(
     var.tags,
@@ -99,6 +106,8 @@ module "portal_deployment" {
 
   service = local.service_config
 
+  ip_endpoints = local.ip_endpoints
+
   placement_strategy = {
     name = "${var.name}-placement"
     attributes = var.placement_attributes
@@ -111,4 +120,4 @@ module "portal_deployment" {
   allowed_providers = var.allowed_providers
   environment = var.environment
   tags = local.common_tags
-} 
+}
