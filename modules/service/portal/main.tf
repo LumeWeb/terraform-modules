@@ -71,17 +71,16 @@ locals {
     {
       port = 80
       as = 80
-      accept = ["http"]
+      global = true
       to = [{
-        service = var.name
+        ip = "default"
       }]
     },
     {
       port = 443
       as = 443
-      accept = ["https"]
       to = [{
-        service = var.name
+        ip = "default"
       }]
     }
   ]
