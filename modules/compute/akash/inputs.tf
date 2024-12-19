@@ -38,6 +38,10 @@ variable "service" {
       proto    = optional(string, "tcp")
       global   = optional(bool, false)
       accept   = optional(list(string))
+      to       = optional(list(object({
+        global = optional(bool, false)
+        ip     = optional(string)
+      })))
     })), [])
   })
 
@@ -152,5 +156,13 @@ variable "debug" {
 variable "tags" {
   description = "Resource tags"
   type        = map(string)
+  default     = {}
+}
+
+variable "ip_endpoints" {
+  description = "IP endpoints configuration"
+  type        = map(object({
+    kind = string
+  }))
   default     = {}
 }

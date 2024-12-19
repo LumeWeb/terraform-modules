@@ -1,6 +1,4 @@
 locals {
-
-
   # Name handling constants
   k8s_max_length = 63
   k8s_hash_length = 8  # Reduced from 10
@@ -34,7 +32,8 @@ locals {
         as = try(coalesce(port.as, port.port), port.port)
       },
         lower(port.proto) != "http" ? { proto = port.proto } : {},
-      try(length(coalesce(port.accept, [])) > 0 ? { accept = port.accept } : {}, {})
+      try(length(coalesce(port.accept, [])) > 0 ? { accept = port.accept } : {}, {}),
+      try(length(coalesce(port.to, [])) > 0 ? { to = port.to } : {}, {})
     )
   ] : null
 
@@ -92,6 +91,11 @@ locals {
     }
   }
 
+  # Endpoints configuration
+  endpoints_config = length(var.ip_endpoints) > 0 ? {
+    endpoints = var.ip_endpoints
+  } : {}
+
   # Final SDL structure
   service_config = {
     image   = var.service.image
@@ -102,23 +106,26 @@ locals {
     }
   }
 
-  generated_sdl = {
-    version = "2.0"
-    services = {
-      "${local.service_name}" = local.service_config
-    }
-    profiles = {
-      compute = {
-        "${local.service_name}" = {
-          resources = local.compute_resources
+  generated_sdl = merge(
+    {
+      version = "2.0"
+      services = {
+        "${local.service_name}" = local.service_config
+      }
+      profiles = {
+        compute = {
+          "${local.service_name}" = {
+            resources = local.compute_resources
+          }
+        }
+        placement = {
+          "${var.placement_strategy.name}" = local.placement_config
         }
       }
-      placement = {
-        "${var.placement_strategy.name}" = local.placement_config
+      deployment = {
+        "${local.service_name}" = local.deployment_config
       }
-    }
-    deployment = {
-      "${local.service_name}" = local.deployment_config
-    }
-  }
+    },
+    local.endpoints_config
+  )
 }
