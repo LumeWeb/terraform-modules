@@ -58,7 +58,7 @@ locals {
       port         = var.valkey_config.port
       as          = var.valkey_config.port
       proto       = "tcp"
-      to          = []
+      global      = true
     }
   ]
 
