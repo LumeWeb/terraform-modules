@@ -103,6 +103,17 @@ variable "database" {
   }
 }
 
+# Redis Configuration
+variable "redis" {
+  description = "Redis configuration"
+  type = object({
+    host     = string
+    port     = number
+    password = string
+  })
+  sensitive = true
+}
+
 # Etcd Configuration
 variable "etcd" {
   description = "Etcd configuration"
