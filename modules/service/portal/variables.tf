@@ -4,7 +4,7 @@ variable "name" {
   default     = "portal"
 
   validation {
-    condition     = can(regex("^[a-z][a-z0-9-]*$", var.name))
+    condition = can(regex("^[a-z][a-z0-9-]*$", var.name))
     error_message = "Name must be lowercase alphanumeric with hyphens"
   }
 }
@@ -58,7 +58,7 @@ variable "mail" {
     username = string
     password = string
     from     = string
-    ssl      = optional(bool, false)
+    ssl = optional(bool, false)
   })
   sensitive = true
 }
@@ -69,15 +69,15 @@ variable "storage" {
   type = object({
     s3 = object({
       buffer_bucket = string
-      endpoint     = string
-      region       = string
-      access_key   = string
-      secret_key   = string
+      endpoint      = string
+      region        = string
+      access_key    = string
+      secret_key    = string
     })
     sia = object({
-      key     = string
+      key = string
       cluster = optional(bool, false)
-      url     = optional(string)
+      url = optional(string)
     })
   })
   sensitive = true
@@ -87,18 +87,18 @@ variable "storage" {
 variable "database" {
   description = "Database configuration"
   type = object({
-    type     = string
-    file     = optional(string)
-    host     = optional(string)
-    port     = optional(number)
+    type = string
+    file = optional(string)
+    host = optional(string)
+    port = optional(number)
     username = optional(string)
     password = optional(string)
-    name     = optional(string)
+    name = optional(string)
   })
   sensitive = true
 
   validation {
-    condition     = contains(["sqlite", "mysql"], var.database.type)
+    condition = contains(["sqlite", "mysql"], var.database.type)
     error_message = "Database type must be either 'sqlite' or 'mysql'"
   }
 }
@@ -107,8 +107,7 @@ variable "database" {
 variable "redis" {
   description = "Redis configuration"
   type = object({
-    host     = string
-    port     = number
+    endpoint = string
     password = string
   })
   sensitive = true
@@ -119,8 +118,8 @@ variable "etcd" {
   description = "Etcd configuration"
   type = object({
     endpoints = list(string)
-    username  = string
-    password  = string
+    username = string
+    password = string
   })
   sensitive = true
 }
@@ -141,24 +140,24 @@ variable "environment" {
 
 variable "placement_attributes" {
   description = "Placement attributes for provider selection"
-  type        = map(string)
-  default     = {}
+  type = map(string)
+  default = {}
 }
 
 variable "allowed_providers" {
   description = "List of allowed Akash provider addresses"
-  type        = list(string)
+  type = list(string)
 }
 
 variable "tags" {
   description = "Resource tags"
-  type        = map(string)
-  default     = {}
+  type = map(string)
+  default = {}
 }
 
 variable "extra_env_vars" {
   description = "Additional environment variables for portal configuration and plugins"
-  type        = map(string)
-  default     = {}
+  type = map(string)
+  default = {}
   sensitive   = true
 }
