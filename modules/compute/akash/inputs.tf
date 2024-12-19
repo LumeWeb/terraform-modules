@@ -30,7 +30,14 @@ variable "service" {
         class = optional(string, "beta3")
         read_only = optional(bool, false)
       }))
-    }))
+    }), {
+      root = {
+        size = {
+          value = 1
+          unit = "Gi"
+        }
+      }
+    })
     env       = optional(map(string), {})
     expose    = optional(list(object({
       port     = number
@@ -78,16 +85,14 @@ variable "service" {
   }
 
   validation {
-    condition = var.service.storage == null || (
-    var.service.storage.persistent_data == null ||
+    condition = var.service.storage.persistent_data == null || (
     can(regex("^(/[^/]+)+$", coalesce(var.service.storage.persistent_data.mount, "/data")))
     )
     error_message = "Invalid mount path format. Must be an absolute path"
   }
 
   validation {
-    condition = var.service.storage == null || (
-    var.service.storage.persistent_data == null ||
+    condition = var.service.storage.persistent_data == null || (
     contains(["beta1", "beta2", "beta3"], coalesce(var.service.storage.persistent_data.class, "beta3"))
     )
     error_message = "Invalid storage class. Must be one of: beta1, beta2, beta3"
@@ -95,11 +100,9 @@ variable "service" {
 
   validation {
     condition = contains(["Ki", "Mi", "Gi", "Ti"], var.service.memory.unit) && (
-    var.service.storage == null || (
-    contains(["Ki", "Mi", "Gi", "Ti"], var.service.storage.root.size.unit) &&
+    contains(["Ki", "Mi", "Gi", "Ti"], coalesce(var.service.storage.root.size.unit, "Gi")) &&
     (var.service.storage.persistent_data == null ||
-    contains(["Ki", "Mi", "Gi", "Ti"], var.service.storage.persistent_data.size.unit))
-    )
+    contains(["Ki", "Mi", "Gi", "Ti"], coalesce(var.service.storage.persistent_data.size.unit, "Gi")))
     )
     error_message = "Memory and storage units must be one of: Ki, Mi, Gi, Ti"
   }
