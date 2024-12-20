@@ -16,7 +16,7 @@ output "service" {
     peer_port    = var.ports.peer
     metrics_port = var.ports.metrics
     endpoints    = [
-      "${module.etcd_deployment.provider_host}:${module.etcd_deployment.port}"
+      "http://${module.etcd_deployment.provider_host}:${module.etcd_deployment.port}"
     ]
   }
 }
