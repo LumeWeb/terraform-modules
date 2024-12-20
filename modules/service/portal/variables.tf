@@ -107,7 +107,7 @@ variable "database" {
 variable "redis" {
   description = "Redis configuration"
   type = object({
-    address = string
+    address  = string
     password = string
   })
   sensitive = true
@@ -120,6 +120,7 @@ variable "etcd" {
     endpoints = list(string)
     username = string
     password = string
+    prefix   = optional(string, "/config/portal")
   })
   sensitive = true
 }

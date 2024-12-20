@@ -1,4 +1,5 @@
 locals {
+  etcd_prefix = format("%s/%s", var.etcd.prefix, var.portal_name)
   # Base configuration
   base_config = {
     name  = var.name
@@ -47,6 +48,7 @@ locals {
     PORTAL_CORE_CLUSTERED_ETCD_ENDPOINTS = join(",", var.etcd.endpoints)
     PORTAL_CORE_CLUSTERED_ETCD_USERNAME = var.etcd.username
     PORTAL_CORE_CLUSTERED_ETCD_PASSWORD = var.etcd.password
+    PORTAL_CORE_CLUSTERED_ETCD_PREFIX = local.etcd_prefix
 
     # Cluster
     PORTAL_CORE_CLUSTERED_ENABLED = var.cluster ? "true" : "false"
