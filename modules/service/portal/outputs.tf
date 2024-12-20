@@ -5,5 +5,5 @@ output "dns_fqdn" {
 
 output "ip_address" {
   description = "Portal service IP address"
-  value       = module.portal_deployment.ips[0]
+  value       = module.portal_deployment.ips[0].ip
 }
