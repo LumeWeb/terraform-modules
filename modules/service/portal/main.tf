@@ -1,5 +1,5 @@
 locals {
-  etcd_prefix = format("%s/%s", var.etcd.prefix, var.portal_name)
+  etcd_prefix = format("%s/%s", var.etcd.prefix, var.name)
   # Base configuration
   base_config = {
     name  = var.name
