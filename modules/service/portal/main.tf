@@ -14,55 +14,55 @@ locals {
   # Environment variables
   base_env_vars = {
     # Core
-    PORTAL_CORE_DOMAIN      = var.domain
-    PORTAL_CORE_PORTAL_NAME = var.portal_name
-    PORTAL_CORE_PORT = tostring(var.port)
+    PORTAL__CORE__DOMAIN      = var.domain
+    PORTAL__CORE__PORTAL_NAME = var.portal_name
+    PORTAL__CORE__PORT = tostring(var.port)
 
     # Mail
-    PORTAL_CORE_MAIL_HOST     = var.mail.host
-    PORTAL_CORE_MAIL_USERNAME = var.mail.username
-    PORTAL_CORE_MAIL_PASSWORD = var.mail.password
-    PORTAL_CORE_MAIL_FROM     = var.mail.from
-    PORTAL_CORE_MAIL_SSL = var.mail.ssl ? "true" : "false"
+    PORTAL__CORE__MAIL__HOST     = var.mail.host
+    PORTAL__CORE__MAIL__USERNAME = var.mail.username
+    PORTAL__CORE__MAIL__PASSWORD = var.mail.password
+    PORTAL__CORE__MAIL__FROM     = var.mail.from
+    PORTAL__CORE__MAIL__SSL = var.mail.ssl ? "true" : "false"
 
     # S3 Storage
-    PORTAL_CORE_STORAGE_S3_BUFFER_BUCKET = var.storage.s3.buffer_bucket
-    PORTAL_CORE_STORAGE_S3_ENDPOINT      = var.storage.s3.endpoint
-    PORTAL_CORE_STORAGE_S3_REGION        = var.storage.s3.region
-    PORTAL_CORE_STORAGE_S3_ACCESS_KEY    = var.storage.s3.access_key
-    PORTAL_CORE_STORAGE_S3_SECRET_KEY = var.storage.s3.secret_key
+    PORTAL__CORE__STORAGE__S3__BUFFER_BUCKET = var.storage.s3.buffer_bucket
+    PORTAL__CORE__STORAGE__S3__ENDPOINT      = var.storage.s3.endpoint
+    PORTAL__CORE__STORAGE__S3__REGION        = var.storage.s3.region
+    PORTAL__CORE__STORAGE__S3__ACCESS_KEY    = var.storage.s3.access_key
+    PORTAL__CORE__STORAGE__S3__SECRET_KEY = var.storage.s3.secret_key
 
     # Sia Storage
-    PORTAL_CORE_STORAGE_SIA_KEY     = var.storage.sia.key
-    PORTAL_CORE_STORAGE_SIA_CLUSTER = var.storage.sia.cluster ? "true" : "false"
-    PORTAL_CORE_STORAGE_SIA_URL = var.storage.sia.url
+    PORTAL__CORE__STORAGE__SIA__KEY     = var.storage.sia.key
+    PORTAL__CORE__STORAGE__SIA__CLUSTER = var.storage.sia.cluster ? "true" : "false"
+    PORTAL__CORE__STORAGE__SIA__URL = var.storage.sia.url
 
     # Database
-    PORTAL_CORE_DB_TYPE = var.database.type
+    PORTAL__CORE__DB__TYPE = var.database.type
 
     # Redis
-    PORTAL_CORE_CLUSTERED_REDIS_ADDRESS = var.redis.address
-    PORTAL_CORE_CLUSTERED_REDIS_PASSWORD = var.redis.password
+    PORTAL__CORE__CLUSTERED__REDIS__ADDRESS = var.redis.address
+    PORTAL__CORE__CLUSTERED__REDIS__PASSWORD = var.redis.password
 
     # Etcd
-    PORTAL_CORE_CLUSTERED_ETCD_ENDPOINTS = join(",", var.etcd.endpoints)
-    PORTAL_CORE_CLUSTERED_ETCD_USERNAME = var.etcd.username
-    PORTAL_CORE_CLUSTERED_ETCD_PASSWORD = var.etcd.password
-    PORTAL_CORE_CLUSTERED_ETCD_PREFIX = local.etcd_prefix
+    PORTAL__CORE__CLUSTERED__ETCD__ENDPOINTS = join(",", var.etcd.endpoints)
+    PORTAL__CORE__CLUSTERED__ETCD__USERNAME = var.etcd.username
+    PORTAL__CORE__CLUSTERED__ETCD__PASSWORD = var.etcd.password
+    PORTAL__CORE__CLUSTERED__ETCD__PREFIX = local.etcd_prefix
 
     # Cluster
-    PORTAL_CORE_CLUSTERED_ENABLED = var.cluster ? "true" : "false"
+    PORTAL__CORE__CLUSTERED__ENABLED = var.cluster ? "true" : "false"
   }
 
   # Add conditional database environment variables
   db_env_vars = var.database.type == "sqlite" ? {
-    PORTAL_CORE_DB_FILE = var.database.file
+    PORTAL__CORE__DB__FILE = var.database.file
   } : {
-    PORTAL_CORE_DB_HOST     = var.database.host
-    PORTAL_CORE_DB_PORT = tostring(var.database.port)
-    PORTAL_CORE_DB_USERNAME = var.database.username
-    PORTAL_CORE_DB_PASSWORD = var.database.password
-    PORTAL_CORE_DB_NAME     = var.database.name
+    PORTAL__CORE__DB__HOST     = var.database.host
+    PORTAL__CORE__DB__PORT = tostring(var.database.port)
+    PORTAL__CORE__DB__USERNAME = var.database.username
+    PORTAL__CORE__DB__PASSWORD = var.database.password
+    PORTAL__CORE__DB__NAME     = var.database.name
   }
 
   # Final environment variables including extras
