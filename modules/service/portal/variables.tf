@@ -156,6 +156,11 @@ variable "tags" {
   default = {}
 }
 
+variable "ssl_email" {
+  description = "Email for SSL certificate"
+  type        = string
+}
+
 variable "extra_env_vars" {
   description = "Additional environment variables for portal configuration and plugins"
   type = map(string)
