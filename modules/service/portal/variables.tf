@@ -94,6 +94,8 @@ variable "database" {
     username = optional(string)
     password = optional(string)
     name = optional(string)
+    tls = optional(bool, false)
+    tls_skip_verify = optional(bool, false)
   })
   sensitive = true
 

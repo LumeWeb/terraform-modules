@@ -66,6 +66,8 @@ locals {
     PORTAL__CORE__DB__USERNAME = var.database.username
     PORTAL__CORE__DB__PASSWORD = var.database.password
     PORTAL__CORE__DB__NAME     = var.database.name
+    PORTAL__CORE__DB__TLS = var.database.tls ? "true" : "false"
+    PORTAL__CORE__DB__TLS_SKIP_VERIFY = var.database.tls_skip_verify ? "true" : "false"
   }
 
   # Final environment variables including extras
