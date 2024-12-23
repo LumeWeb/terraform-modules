@@ -14,15 +14,16 @@ locals {
     GF_DATABASE_SSL_MODE = var.database.ssl_mode
   }
 
-  storage_config = var.database.type == "sqlite" ? [
-    {
+  storage_config = {
+    persistent_data = var.database.type == "sqlite" ? {
       size = {
         value = var.storage_size
-        unit  = var.storage_unit
+        unit = var.storage_unit
       }
-      persistent = true
-    }
-  ] : []
+      mount = "/var/lib/grafana"
+      class = "beta3"
+    } : null
+  }
 
   # Grafana service configuration
   service_config = {
