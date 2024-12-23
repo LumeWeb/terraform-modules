@@ -4,6 +4,12 @@ variable "name" {
   default     = "grafana"
 }
 
+variable "image" {
+  description = "Grafana container image"
+  type        = string
+  default     = "ghcr.io/lumeweb/akash-grafana:develop"
+}
+
 variable "admin_password" {
   description = "Grafana admin password"
   type        = string
@@ -19,12 +25,6 @@ variable "admin_user" {
   description = "Grafana admin username"
   type        = string
   default     = "admin"
-}
-
-variable "grafana_image" {
-  description = "Grafana container image"
-  type        = string
-  default     = "grafana/grafana:10.2.2"
 }
 
 variable "grafana_port" {

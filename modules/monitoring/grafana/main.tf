@@ -28,7 +28,7 @@ locals {
   # Grafana service configuration
   service_config = {
     name      = var.name
-    image     = var.grafana_image
+    image     = var.image
     cpu_units = var.cpu_units
     memory = {
       value = var.memory_size
