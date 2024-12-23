@@ -107,3 +107,18 @@ variable "tags" {
   type        = map(string)
   default     = {}
 }
+
+# Database Configuration
+variable "database" {
+  description = "Database configuration"
+  type = object({
+    host     = string
+    port     = number
+    username = string
+    password = string
+    name     = optional(string, "grafana")
+    type     = optional(string, "sqlite")
+    ssl_mode      = optional(string)
+  })
+  sensitive = true
+}
