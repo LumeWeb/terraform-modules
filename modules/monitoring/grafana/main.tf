@@ -26,25 +26,23 @@ locals {
 
   # Grafana service configuration
   service_config = {
-    grafana = {
-      image     = var.grafana_image
-      cpu_units = var.cpu_units
-      memory = {
-        value = var.memory_size
-        unit  = var.memory_unit
-      }
-      storage = local.storage_config
-      env     = local.base_env_vars
-      expose = [
-        {
-          port   = var.grafana_port
-          as     = 80
-          global = true
-          proto  = "http"
-          accept = [var.dns.domain]
-        }
-      ]
+    image     = var.grafana_image
+    cpu_units = var.cpu_units
+    memory = {
+      value = var.memory_size
+      unit  = var.memory_unit
     }
+    storage = local.storage_config
+    env     = local.base_env_vars
+    expose = [
+      {
+        port   = var.grafana_port
+        as     = 80
+        global = true
+        proto  = "http"
+        accept = [var.dns.domain]
+      }
+    ]
   }
 }
 
