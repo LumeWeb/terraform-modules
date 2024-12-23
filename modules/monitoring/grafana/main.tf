@@ -8,7 +8,6 @@ locals {
 
     # Database configuration
     GF_DATABASE_TYPE     = var.database.type
-    GF_DATABASE_URL      = var.database.url
     GF_DATABASE_NAME     = var.database.name
     GF_DATABASE_USER     = var.database.username
     GF_DATABASE_PASSWORD = var.database.password
