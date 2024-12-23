@@ -56,7 +56,7 @@ variable "dns" {
 variable "cpu_units" {
   description = "CPU units for Grafana service"
   type        = number
-  default     = 1000
+  default     = 1
 }
 
 variable "memory_size" {
