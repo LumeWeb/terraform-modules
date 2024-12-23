@@ -1,3 +1,9 @@
+variable "name" {
+  description = "Name of the Grafana deployment"
+  type        = string
+  default     = "grafana"
+}
+
 variable "admin_password" {
   description = "Grafana admin password"
   type        = string
