@@ -39,7 +39,7 @@ locals {
       expose = [
         {
           port   = var.grafana_port
-          as     = 443
+          as     = 80
           global = true
           proto  = "http"
           accept = [var.dns.domain]
