@@ -1,9 +1,8 @@
 locals {
-
   database_url = var.database.type == "mysql" ? format(
     "mysql://%s:%s@%s:%d/%s?collation=utf8mb4_unicode_ci&allowNativePasswords=true&clientFoundRows=true&tls=%s",
-    var.database.username,
-    var.database.password,
+    urlencode(var.database.username),
+    urlencode(var.database.password),
     var.database.host,
     var.database.port,
     var.database.name,
@@ -12,6 +11,7 @@ locals {
     "sqlite3://%s",
     "/var/lib/grafana/grafana.db"
   )
+
   # Base Grafana environment variables
   base_env_vars = {
     GF_SECURITY_ADMIN_USER     = var.admin_user
