@@ -1,4 +1,17 @@
 locals {
+
+  database_url = var.database.type == "mysql" ? format(
+    "mysql://%s:%s@%s:%d/%s?collation=utf8mb4_unicode_ci&allowNativePasswords=true&clientFoundRows=true&tls=%s",
+    var.database.username,
+    var.database.password,
+    var.database.host,
+    var.database.port,
+    var.database.name,
+    var.database.ssl_mode
+  ) : format(
+    "sqlite3://%s",
+    "/var/lib/grafana/grafana.db"
+  )
   # Base Grafana environment variables
   base_env_vars = {
     GF_SECURITY_ADMIN_USER     = var.admin_user
@@ -7,12 +20,7 @@ locals {
     GF_INSTALL_PLUGINS = join(",", var.plugins)
 
     # Database configuration
-    GF_DATABASE_TYPE     = var.database.type
-    GF_DATABASE_NAME     = var.database.name
-    DF_DATABASE_HOST     = var.database.host
-    GF_DATABASE_USER     = var.database.username
-    GF_DATABASE_PASSWORD = var.database.password
-    GF_DATABASE_SSL_MODE = var.database.ssl_mode
+    GF_DATABASE_URL      = local.database_url
   }
 
   storage_config = {
