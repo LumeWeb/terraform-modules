@@ -90,4 +90,23 @@ module "nodes" {
     Role    = "node"
     NodeID  = each.key
   })
+
+  service_expose = concat(
+    [
+      {
+        port   = var.mysql_port
+        as     = var.mysql_port
+        global = true
+        proto  = "tcp"
+      }
+    ],
+      var.metrics_enabled ? [
+      {
+        port   = 8080
+        as     = 8080
+        global = true
+        proto  = "tcp"
+      }
+    ] : []
+  )
 }

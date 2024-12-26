@@ -83,20 +83,30 @@ locals {
   final_env_vars = merge(local.base_env_vars, local.db_env_vars, var.extra_env_vars, local.metrics_env_vars)
 
   # Service expose configuration
-  service_expose = [
-    {
-      port   = 80
-      as     = 80
-      global = true
-      ip     = "default"
-    },
-    {
-      port = 443
-      as   = 443
-      global = true
-      ip   = "default"
-    }
-  ]
+  service_expose = concat(
+    [
+      {
+        port   = 80
+        as     = 80
+        global = true
+        ip     = "default"
+      },
+      {
+        port = 443
+        as   = 443
+        global = true
+        ip   = "default"
+      }
+    ],
+      var.metrics_enabled ? [
+      {
+        port   = 8080
+        as     = 8080
+        global = true
+        proto  = "tcp"
+      }
+    ] : []
+  )
 
   # Final service configuration
   service_config = {

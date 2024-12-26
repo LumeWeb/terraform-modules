@@ -220,6 +220,14 @@ locals {
         proto  = "tcp"
         accept = local.s3_fqdn != null ? [local.s3_fqdn] : []
       }
+    ] : [],
+      var.metrics_enabled ? [
+      {
+        port   = 8080
+        as     = 8080
+        global = true
+        proto  = "tcp"
+      }
     ] : []
   )
 

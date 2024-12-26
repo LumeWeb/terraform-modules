@@ -59,14 +59,24 @@ locals {
   } : {}
 
   # Service expose configuration
-  service_expose = [
-    {
-      port         = var.valkey_config.port
-      as          = var.valkey_config.port
-      proto       = "tcp"
-      global      = true
-    }
-  ]
+  service_expose = concat(
+    [
+      {
+        port         = var.valkey_config.port
+        as          = var.valkey_config.port
+        proto       = "tcp"
+        global      = true
+      }
+    ],
+      var.metrics_enabled ? [
+      {
+        port   = 8080
+        as     = 8080
+        global = true
+        proto  = "tcp"
+      }
+    ] : []
+  )
 
   # Final service configuration
   service_config = {

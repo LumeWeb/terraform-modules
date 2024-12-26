@@ -83,7 +83,7 @@ locals {
     # Optional metrics port
       var.metrics_enabled ? [
       {
-        port   = var.metrics.port
+        port   = 8080
         global = true
         proto  = "tcp"
       }
