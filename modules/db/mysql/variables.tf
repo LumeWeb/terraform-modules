@@ -76,17 +76,11 @@ variable "cluster" {
 variable "etcd" {
   description = "ETCD configuration"
   type = object({
-    endpoints = list(string)
-    username  = string
-    password  = string
-    prefix    = string
+    endpoints = optional(list(string), [])
+    username  = optional(string, "")
+    password  = optional(string, "")
+    prefix    = optional(string, "/discovery/prometheus/mysql")
   })
-  default = {
-    endpoints = []
-    username  = ""
-    password  = ""
-    prefix    = "/discovery/prometheus/mysql"
-  }
 }
 
 # Resource Configuration
@@ -196,22 +190,4 @@ variable "metrics_service_name" {
   description = "Name of the metrics service"
   type        = string
   default     = "mysql-metrics"
-}
-
-variable "etcd_username" {
-  description = "Username for etcd authentication"
-  type        = string
-  default     = "root"
-}
-
-variable "etcd_password" {
-  description = "Password for etcd authentication"
-  type        = string
-  sensitive   = true
-}
-
-variable "etcd_prefix" {
-  description = "Prefix for etcd keys for mysql service discovery by prometheus"
-  type        = string
-  default     = "/discovery/prometheus/mysql"
 }
