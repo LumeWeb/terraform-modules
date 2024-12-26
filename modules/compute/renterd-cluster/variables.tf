@@ -174,3 +174,9 @@ variable "etcd_password" {
   type        = string
   sensitive   = true
 }
+
+variable "etcd_prefix" {
+  description = "Prefix for etcd keys"
+  type        = string
+  default     = "/discovery/prometheus"
+}
