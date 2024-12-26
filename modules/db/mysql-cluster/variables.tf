@@ -144,9 +144,9 @@ variable "etc_password" {
 }
 
 variable "etc_prefix" {
-  description = "Prefix for etcd keys"
+  description = "Prefix for etcd keys for mysql service discovery by prometheus"
   type        = string
-  default     = "/discovery/mysql"
+  default     = "/discovery/prometheus/mysql"
 }
 
 variable "tags" {
@@ -159,4 +159,28 @@ variable "backups_enabled" {
   description = "Enable automatic backups"
   type        = bool
   default     = true
+}
+
+variable "metrics_password" {
+  description = "Password for the metrics service"
+  type        = string
+  sensitive   = true
+}
+
+variable "metrics_service_name" {
+  description = "Name of the service"
+  type        = string
+  default     = "mysql"
+}
+
+variable "etcd_username" {
+  description = "Username for etcd authentication"
+  type        = string
+  default     = "root"
+}
+
+variable "etcd_password" {
+  description = "Password for etcd authentication"
+  type        = string
+  sensitive   = true
 }

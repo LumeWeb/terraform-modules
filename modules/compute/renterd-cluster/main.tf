@@ -1,15 +1,19 @@
 module "renterd_bus" {
   source = "../renterd"
 
-  name         = "${var.name}-cluster"
-  cluster      = true
-  image        = var.image
-  mode         = "bus"
-  environment  = var.environment
-  seed         = var.seed
-  api_password = var.bus_api_password
-  metrics_password = var.metrics_password
-  database     = var.database
+  name                 = "${var.name}-cluster-bus"
+  cluster              = true
+  image                = var.image
+  mode                 = "bus"
+  environment          = var.environment
+  seed                 = var.seed
+  api_password         = var.bus_api_password
+  metrics_password     = var.metrics_password
+  database             = var.database
+  metrics_service_name = "${var.metrics_service_name}-bus"
+  etcd_username        = var.etcd_username
+  etcd_password        = var.etcd_password
+
 
   allowed_providers = var.allowed_providers
 
@@ -21,7 +25,7 @@ module "renterd_bus" {
 
   network = {
     enable_ssl = var.enable_ssl
-    http_port = var.http_port
+    http_port  = var.http_port
   }
 
   resources = {
@@ -44,14 +48,17 @@ module "renterd_workers" {
   count  = var.worker_count
   depends_on = [module.renterd_bus]
 
-  name         = "${var.name}-cluster"
-  cluster      = true
-  image        = var.image
-  mode         = "worker"
-  environment  = var.environment
-  seed         = var.seed
-  api_password = var.worker_api_password
-  metrics_password = var.metrics_password
+  name                 = "${var.name}-cluster-worker"
+  cluster              = true
+  image                = var.image
+  mode                 = "worker"
+  environment          = var.environment
+  seed                 = var.seed
+  api_password         = var.worker_api_password
+  metrics_password     = var.metrics_password
+  metrics_service_name = "${var.metrics_service_name}-worker"
+  etcd_username        = var.etcd_username
+  etcd_password        = var.etcd_password
 
   allowed_providers = var.allowed_providers
 
@@ -59,12 +66,12 @@ module "renterd_workers" {
 
   dns = {
     base_domain = var.base_domain
-    worker_id    = count.index + 1
+    worker_id   = count.index + 1
   }
 
   network = {
     enable_ssl = var.enable_ssl
-    http_port = var.http_port
+    http_port  = var.http_port
   }
 
   worker_config = {
@@ -95,14 +102,17 @@ module "renterd_autopilot" {
   source = "../renterd"
   depends_on = [module.renterd_workers]
 
-  name         = "${var.name}-cluster"
-  cluster      = true
-  image        = var.image
-  mode         = "autopilot"
-  environment  = var.environment
-  seed         = var.seed
-  api_password = var.worker_api_password
-  metrics_password = var.metrics_password
+  name                 = "${var.name}-cluster-autopilot"
+  cluster              = true
+  image                = var.image
+  mode                 = "autopilot"
+  environment          = var.environment
+  seed                 = var.seed
+  api_password         = var.worker_api_password
+  metrics_password     = var.metrics_password
+  metrics_service_name = "${var.metrics_service_name}-autopilot"
+  etcd_username        = var.etcd_username
+  etcd_password        = var.etcd_password
 
   allowed_providers = var.allowed_providers
 
@@ -114,7 +124,7 @@ module "renterd_autopilot" {
 
   network = {
     enable_ssl = var.enable_ssl
-    http_port = var.http_port
+    http_port  = var.http_port
   }
 
   database = var.database

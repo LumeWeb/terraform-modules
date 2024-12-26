@@ -145,3 +145,27 @@ variable "name" {
   type        = string
   default     = "renterd"
 }
+
+variable "metrics_enabled" {
+  description = "Enable metrics"
+  type        = bool
+  default     = false
+}
+
+variable "metrics_service_name" {
+  description = "Name of the service"
+  type        = string
+  default     = "renterd"
+}
+
+variable "etcd_username" {
+  description = "Username for etcd authentication"
+  type        = string
+  default     = "root"
+}
+
+variable "etcd_password" {
+  description = "Password for etcd authentication"
+  type        = string
+  sensitive   = true
+}

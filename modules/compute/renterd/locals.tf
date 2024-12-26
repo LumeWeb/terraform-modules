@@ -114,7 +114,6 @@ locals {
     RENTERD_API_PASSWORD         = var.api_password
 
     # Metrics configuration
-    METRICS_PASSWORD         = var.metrics_password
   }
 
   # Base environment variables for worker mode
@@ -141,7 +140,6 @@ locals {
     RENTERD_AUTOPILOT_ENABLED = "false"
 
     # Metrics configuration
-    METRICS_PASSWORD         = var.metrics_password
   }
 
   # Base environment variables for autopilot mode
@@ -166,7 +164,6 @@ locals {
     RENTERD_API_PASSWORD = var.api_password
 
     # Metrics configuration
-    METRICS_PASSWORD         = var.metrics_password
   }
 
   # Main base environment variables
@@ -188,13 +185,19 @@ locals {
     RENTERD_AUTOPILOT_ENABLED = "true"
 
     # Metrics configuration
-    METRICS_PASSWORD         = var.metrics_password
   }
+
+  # Metrics environment variables
+  metrics_env_vars = var.metrics_enabled ? {
+    METRICS_PASSWORD = var.metrics_password
+    METRICS_SERVICE_NAME = var.metrics_service_name
+  } : {}
 
   # 3. Environment variables - Final merged configuration
   service_env_vars = merge(
     local.base_env_vars,
-    local.database_env_vars
+    local.database_env_vars,
+    local.metrics_env_vars
   )
 
   # Service expose configuration with port mapping

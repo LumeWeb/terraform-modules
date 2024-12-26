@@ -122,7 +122,7 @@ variable "etcd" {
     endpoints = list(string)
     username = string
     password = string
-    prefix   = optional(string, "/config/portal")
+    prefix   = optional(string, "/discovery/prometheus/portal")
   })
   sensitive = true
 }
@@ -168,4 +168,22 @@ variable "extra_env_vars" {
   type = map(string)
   default = {}
   sensitive   = true
+}
+
+variable "metrics_enabled" {
+  description = "Enable metrics"
+  type        = bool
+  default     = false
+}
+
+variable "metrics_password" {
+  description = "Password for the metrics service"
+  type        = string
+  sensitive   = true
+}
+
+variable "metrics_service_name" {
+  description = "Name of the service"
+  type        = string
+  default     = "portal"
 }
