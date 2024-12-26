@@ -8,6 +8,7 @@ module "renterd_bus" {
   environment          = var.environment
   seed                 = var.seed
   api_password         = var.bus_api_password
+  metrics_enabled      = var.metrics_enabled
   metrics_password     = var.metrics_password
   database             = var.database
   metrics_service_name = "${var.metrics_service_name}-bus"
@@ -55,6 +56,7 @@ module "renterd_workers" {
   environment          = var.environment
   seed                 = var.seed
   api_password         = var.worker_api_password
+  metrics_enabled      = var.metrics_enabled
   metrics_password     = var.metrics_password
   metrics_service_name = "${var.metrics_service_name}-worker"
   etcd_username        = var.etcd_username
@@ -109,6 +111,7 @@ module "renterd_autopilot" {
   environment          = var.environment
   seed                 = var.seed
   api_password         = var.worker_api_password
+  metrics_enabled      = var.metrics_enabled
   metrics_password     = var.metrics_password
   metrics_service_name = "${var.metrics_service_name}-autopilot"
   etcd_username        = var.etcd_username
