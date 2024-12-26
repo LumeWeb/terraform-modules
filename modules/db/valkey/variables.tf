@@ -112,6 +112,11 @@ variable "metrics_service_name" {
   default     = "valkey"
 }
 
+variable "etcd_endpoints" {
+  description = "List of etcd endpoints for service discovery"
+  type        = list(string)
+}
+
 variable "etcd_username" {
   description = "Username for etcd authentication"
   type        = string

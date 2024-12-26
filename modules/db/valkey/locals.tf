@@ -1,7 +1,7 @@
 locals {
   # Base configuration
   base_config = {
-    name = var.name
+    name  = var.name
     image = var.image
     cpu_units = try(var.resources.cpu.cores, 1)
     memory = {
@@ -21,7 +21,7 @@ locals {
     persistent_data = try(var.resources.persistent_storage, null) != null ? {
       size = {
         value = var.resources.persistent_storage.size
-        unit = var.resources.persistent_storage.unit
+        unit  = var.resources.persistent_storage.unit
       }
       mount = var.resources.persistent_storage.mount
       class = var.resources.persistent_storage.class
@@ -30,11 +30,11 @@ locals {
 
   # Environment variables
   base_env_vars = {
-    VALKEY_PORT             = tostring(var.valkey_config.port)
-    VALKEY_BIND            = var.valkey_config.bind
-    VALKEY_MAXMEMORY       = tostring(var.valkey_config.maxmemory)
+    VALKEY_PORT = tostring(var.valkey_config.port)
+    VALKEY_BIND             = var.valkey_config.bind
+    VALKEY_MAXMEMORY = tostring(var.valkey_config.maxmemory)
     VALKEY_MAXMEMORY_POLICY = var.valkey_config.maxmemory_policy
-    VALKEY_APPENDONLY      = var.valkey_config.appendonly ? "yes" : "no"
+    VALKEY_APPENDONLY       = var.valkey_config.appendonly ? "yes" : "no"
   }
 
   # Add password if set
@@ -44,8 +44,8 @@ locals {
 
   # Add backup configuration if enabled
   env_with_backup = var.backup_config.enabled ? merge(local.env_with_password, {
-    ENABLE_BACKUP    = "true"
-    BACKUP_SCHEDULE  = var.backup_config.schedule
+    ENABLE_BACKUP   = "true"
+    BACKUP_SCHEDULE = var.backup_config.schedule
     S3_ENDPOINT     = var.backup_config.s3_endpoint
     S3_ACCESS_KEY   = var.backup_config.s3_access_key
     S3_SECRET_KEY   = var.backup_config.s3_secret_key
@@ -54,18 +54,22 @@ locals {
 
   # Metrics environment variables
   metrics_env_vars = var.metrics_enabled ? {
-    METRICS_PASSWORD = var.metrics_password
+    METRICS_PASSWORD     = var.metrics_password
     METRICS_SERVICE_NAME = var.metrics_service_name
+    ETCD_ENDPOINTS = join(",", var.etcd_endpoints)
+    ETCD_USERNAME        = var.etcd_username
+    ETCD_PASSWORD        = var.etcd_password
+    ETCD_PREFIX          = var.etcd_prefix
   } : {}
 
   # Service expose configuration
   service_expose = concat(
     [
       {
-        port         = var.valkey_config.port
-        as          = var.valkey_config.port
-        proto       = "tcp"
-        global      = true
+        port   = var.valkey_config.port
+        as     = var.valkey_config.port
+        proto  = "tcp"
+        global = true
       }
     ],
       var.metrics_enabled ? [
@@ -80,17 +84,17 @@ locals {
 
   # Final service configuration
   service_config = {
-    name     = local.base_config.name
-    image    = local.base_config.image
+    name      = local.base_config.name
+    image     = local.base_config.image
     cpu_units = local.base_config.cpu_units
-    memory   = local.base_config.memory
-    storage  = local.storage_config
-    env      = merge(local.env_with_backup, local.metrics_env_vars)
-    expose   = local.service_expose
+    memory    = local.base_config.memory
+    storage   = local.storage_config
+    env = merge(local.env_with_backup, local.metrics_env_vars)
+    expose    = local.service_expose
   }
 
   # Tags
   common_tags = {
-    service     = "valkey"
+    service = "valkey"
   }
 }

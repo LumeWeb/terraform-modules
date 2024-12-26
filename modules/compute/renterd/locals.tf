@@ -191,6 +191,10 @@ locals {
   metrics_env_vars = var.metrics_enabled ? {
     METRICS_PASSWORD = var.metrics_password
     METRICS_SERVICE_NAME = var.metrics_service_name
+    ETCD_ENDPOINTS = join(",", var.etcd_endpoints)
+    ETCD_USERNAME = var.etcd_username
+    ETCD_PASSWORD = var.etcd_password
+    ETCD_PREFIX = var.etcd_prefix
   } : {}
 
   # 3. Environment variables - Final merged configuration

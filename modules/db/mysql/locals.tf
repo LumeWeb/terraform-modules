@@ -52,6 +52,10 @@ locals {
     metrics = var.metrics_enabled ? {
       METRICS_PASSWORD = var.metrics_password
       METRICS_SERVICE_NAME = var.metrics_service_name
+      ETCDCTL_ENDPOINTS = join(",", var.etcd.endpoints)
+      ETC_USERNAME = var.etcd.username
+      ETC_PASSWORD = var.etcd.password
+      ETC_PREFIX   = var.etcd.prefix
     } : {}
 
     # Cluster configuration
