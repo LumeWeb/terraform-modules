@@ -215,7 +215,7 @@ variable "etcd_password" {
 variable "etcd_prefix" {
   description = "Prefix for etcd keys"
   type        = string
-  default     = "/config/renterd"
+  default     = "/discovery/prometheus"
 }
 
 variable "cluster" {
