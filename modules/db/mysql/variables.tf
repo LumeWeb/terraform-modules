@@ -34,7 +34,7 @@ variable "network" {
   description = "Network configuration"
   type = object({
     mysql_port = optional(number, 3306)
-    metrics_port = optional(number, 9104)
+    metrics_port = optional(number, 8080)
     enable_ssl = optional(bool, false)
   })
   default = {}
@@ -55,7 +55,7 @@ variable "metrics" {
   description = "Metrics configuration"
   type = object({
     enabled = optional(bool, false)
-    port = optional(number, 9104)
+    port = optional(number, 8080)
   })
   default = {}
 }

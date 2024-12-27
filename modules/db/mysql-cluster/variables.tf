@@ -120,7 +120,7 @@ variable "metrics_enabled" {
 variable "metrics_port" {
   description = "Port for Prometheus metrics"
   type        = number
-  default     = 9104
+  default     = 8080
 }
 
 # Etcd Configuration
