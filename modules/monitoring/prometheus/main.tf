@@ -44,7 +44,6 @@ locals {
     PROMSTER_ETCD_USERNAME = var.promster_etcd_username
     PROMSTER_ETCD_PASSWORD = var.promster_etcd_password
     PROMSTER_ETCD_TIMEOUT = var.promster_etcd_timeout
-    PROMSTER_SCRAPE_ETCD_PATHS = join(",", var.promster_scrape_etcd_paths)
     PROMSTER_SCRAPE_INTERVAL = var.promster_scrape_interval
     PROMSTER_SCRAPE_TIMEOUT = var.promster_scrape_timeout
     PROMSTER_EVALUATION_INTERVAL = var.promster_evaluation_interval

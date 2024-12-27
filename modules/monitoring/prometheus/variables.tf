@@ -152,11 +152,6 @@ variable "promster_etcd_timeout" {
   default     = "30s"
 }
 
-variable "promster_scrape_etcd_paths" {
-  description = "List of base ETCD paths for getting servers to be scrapped"
-  type        = list(string)
-}
-
 variable "promster_scrape_interval" {
   description = "Prometheus scrape interval"
   type        = string
