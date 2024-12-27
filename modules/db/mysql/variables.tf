@@ -189,5 +189,5 @@ variable "metrics_password" {
 variable "metrics_service_name" {
   description = "Name of the metrics service"
   type        = string
-  default     = "mysql-metrics"
+  default     = "mysql"
 }

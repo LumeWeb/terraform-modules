@@ -170,7 +170,7 @@ variable "metrics_password" {
 variable "metrics_service_name" {
   description = "Name of the service"
   type        = string
-  default     = "mysql"
+  default     = "mysql-cluster"
 }
 
 variable "etcd_username" {

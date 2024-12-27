@@ -73,7 +73,7 @@ locals {
   # Metrics environment variables
   metrics_env_vars = var.metrics_enabled ? {
     METRICS_PASSWORD = var.metrics_password
-    METRICS_SERVICE_NAME = var.metrics_service_name
+    METRICS_SERVICE_NAME = "${var.metrics_service_name}-${var.environment}"
     ETCD_ENDPOINTS = join(",", var.etcd.endpoints)
     ETCD_USERNAME = var.etcd.username
     ETCD_PASSWORD = var.etcd.password

@@ -24,5 +24,5 @@ locals {
   }
 
   # Create a prefix for etcd keys
-  etcd_prefix = "${var.etc_prefix}/${var.cluster_name}"
+  etcd_prefix = "${var.etcd_prefix}/${var.cluster_name}"
 }

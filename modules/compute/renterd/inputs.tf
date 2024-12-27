@@ -192,7 +192,6 @@ variable "metrics_enabled" {
 variable "metrics_service_name" {
   description = "Name of the service"
   type        = string
-  default     = "renterd"
 }
 
 variable "etcd_endpoints" {

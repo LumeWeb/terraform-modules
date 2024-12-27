@@ -11,7 +11,7 @@ module "renterd_bus" {
   metrics_enabled      = var.metrics_enabled
   metrics_password     = var.metrics_password
   database             = var.database
-  metrics_service_name = "${var.metrics_service_name}-bus"
+  metrics_service_name = "${var.metrics_service_name}-${var.environment}-bus"
   etcd_endpoints       = var.etcd_endpoints
   etcd_username        = var.etcd_username
   etcd_password        = var.etcd_password
@@ -60,7 +60,7 @@ module "renterd_workers" {
   api_password         = var.worker_api_password
   metrics_enabled      = var.metrics_enabled
   metrics_password     = var.metrics_password
-  metrics_service_name = "${var.metrics_service_name}-worker"
+  metrics_service_name = "${var.metrics_service_name}-${var.environment}-worker"
   etcd_endpoints       = var.etcd_endpoints
   etcd_username        = var.etcd_username
   etcd_password        = var.etcd_password
@@ -117,7 +117,7 @@ module "renterd_autopilot" {
   api_password         = var.worker_api_password
   metrics_enabled      = var.metrics_enabled
   metrics_password     = var.metrics_password
-  metrics_service_name = "${var.metrics_service_name}-autopilot"
+  metrics_service_name = "${var.metrics_service_name}-${var.environment}-autopilot"
   etcd_endpoints       = var.etcd_endpoints
   etcd_username        = var.etcd_username
   etcd_password        = var.etcd_password
