@@ -160,6 +160,7 @@ locals {
     # Disable bus and worker
     RENTERD_WORKER_ENABLED = "false"
     RENTERD_AUTOPILOT_ENABLED = "true"
+    RENTERD_WORKER_ID = "autopilot"
 
     RENTERD_API_PASSWORD = var.api_password
 
