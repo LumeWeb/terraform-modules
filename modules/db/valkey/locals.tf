@@ -78,6 +78,11 @@ locals {
         as     = 8080
         global = true
         proto  = "tcp"
+      }, {
+        port   = 9090
+        as     = 9090
+        global = true
+        proto  = "tcp"
       }
     ] : []
   )
