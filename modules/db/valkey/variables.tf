@@ -138,5 +138,5 @@ variable "etcd_password" {
 variable "etcd_prefix" {
   description = "Prefix for etcd keys for valkey service discovery by prometheus"
   type        = string
-  default     = "/discovery/prometheus/valkey"
+  default     = "/discovery/prometheus"
 }

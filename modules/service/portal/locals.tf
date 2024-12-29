@@ -61,23 +61,24 @@ locals {
   db_env_vars = var.database.type == "sqlite" ? {
     PORTAL__CORE__DB__FILE = var.database.file
   } : {
-    PORTAL__CORE__DB__HOST     = var.database.host
+    PORTAL__CORE__DB__HOST            = var.database.host
     PORTAL__CORE__DB__PORT = tostring(var.database.port)
-    PORTAL__CORE__DB__USERNAME = var.database.username
-    PORTAL__CORE__DB__PASSWORD = var.database.password
-    PORTAL__CORE__DB__NAME     = var.database.name
-    PORTAL__CORE__DB__TLS_ENABLED = var.database.tls ? "true" : "false"
+    PORTAL__CORE__DB__USERNAME        = var.database.username
+    PORTAL__CORE__DB__PASSWORD        = var.database.password
+    PORTAL__CORE__DB__NAME            = var.database.name
+    PORTAL__CORE__DB__TLS_ENABLED     = var.database.tls ? "true" : "false"
     PORTAL__CORE__DB__TLS_SKIP_VERIFY = var.database.tls_skip_verify ? "true" : "false"
   }
 
   # Metrics environment variables
   metrics_env_vars = var.metrics_enabled ? {
-    METRICS_PASSWORD = var.metrics_password
-    METRICS_PORT = var.metrics_port
+    METRICS_PASSWORD     = var.metrics_password
+    METRICS_PORT         = var.metrics_port
     METRICS_SERVICE_NAME = "${var.metrics_service_name}-${var.environment}"
     ETCD_ENDPOINTS = join(",", var.etcd.endpoints)
-    ETCD_USERNAME = var.etcd.username
-    ETCD_PASSWORD = var.etcd.password
+    ETCD_USERNAME        = var.etcd.username
+    ETCD_PASSWORD        = var.etcd.password
+    ETCD_PREFIX          = var.metrics_etcd_prefix
   } : {}
 
   # Final environment variables including extras
@@ -93,10 +94,10 @@ locals {
         ip     = "default"
       },
       {
-        port = 443
-        as   = 443
+        port   = 443
+        as     = 443
         global = true
-        ip   = "default"
+        ip     = "default"
       }
     ],
       var.metrics_enabled ? [
@@ -128,6 +129,6 @@ locals {
 
   # Common tags
   common_tags = {
-    service     = "portal"
+    service = "portal"
   }
 }

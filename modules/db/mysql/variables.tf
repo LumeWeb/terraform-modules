@@ -79,7 +79,7 @@ variable "etcd" {
     endpoints = optional(list(string), [])
     username  = optional(string, "")
     password  = optional(string, "")
-    prefix    = optional(string, "/discovery/prometheus/mysql")
+    prefix    = optional(string, "/discovery/prometheus")
   })
 }
 

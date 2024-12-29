@@ -122,7 +122,7 @@ variable "etcd" {
     endpoints = list(string)
     username = string
     password = string
-    prefix   = optional(string, "/discovery/prometheus/portal")
+    prefix   = optional(string, "/discovery")
   })
   sensitive = true
 }
@@ -191,4 +191,9 @@ variable "metrics_password" {
 variable "metrics_service_name" {
   description = "Name of the service"
   type        = string
+}
+variable "metrics_etcd_prefix" {
+  description = "Prefix for etcd keys for valkey service discovery by prometheus"
+  type        = string
+  default     = "/discovery/prometheus"
 }
