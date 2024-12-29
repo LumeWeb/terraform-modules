@@ -189,6 +189,12 @@ variable "metrics_enabled" {
   default     = false
 }
 
+variable "metrics_port" {
+  description = "Port for Prometheus metrics"
+  type        = number
+  default     = 8080
+}
+
 variable "metrics_service_name" {
   description = "Name of the service"
   type        = string
