@@ -107,6 +107,7 @@ locals {
     RENTERD_HTTP_ADDRESS      = ":${local.http_port}"
     # Using internal S3 port to avoid port conflicts
     RENTERD_S3_ADDRESS        = ":${local.s3_internal_port}"
+    RENTERD_S3_ENABLED        = tostring(var.network.s3_enabled)
 
     # Bus-specific configurations
     RENTERD_BUS_BOOTSTRAP = tostring(coalesce(var.bus_config.bootstrap, true))
@@ -121,6 +122,7 @@ locals {
     RENTERD_API_PASSWORD = var.api_password
     RENTERD_SEED         = var.seed
     RENTERD_HTTP_ADDRESS = ":${local.http_port}"
+    RENTERD_S3_ENABLED   = tostring(var.network.s3_enabled)
 
     RENTERD_BUS_REMOTE_ADDR      = local.bus_remote_addr
     RENTERD_BUS_API_PASSWORD = var.worker_config.bus_remote_password
@@ -145,6 +147,7 @@ locals {
   # Base environment variables for autopilot mode
   autopilot_base_env_vars = {
     RENTERD_HTTP_ADDRESS = ":${local.http_port}"
+    RENTERD_S3_ENABLED   = tostring(var.network.s3_enabled)
     RENTERD_WORKER_ENABLED = "false"
 
     # Autopilot-specific configurations
@@ -180,6 +183,7 @@ locals {
     # Using internal S3 port to avoid port conflicts
     RENTERD_S3_ADDRESS   = ":${local.s3_internal_port}"
     RENTERD_API_PASSWORD = var.api_password
+    RENTERD_S3_ENABLED   = tostring(var.network.s3_enabled)
 
     # Enable all components by default in non-cluster mode
     RENTERD_WORKER_ENABLED    = "true"
