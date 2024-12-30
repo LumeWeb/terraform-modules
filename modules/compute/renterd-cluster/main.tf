@@ -28,6 +28,7 @@ module "renterd_bus" {
 
   network = {
     enable_ssl = var.enable_ssl
+    s3_enabled = var.enable_s3
     http_port  = var.http_port
   }
 
@@ -77,6 +78,7 @@ module "renterd_workers" {
 
   network = {
     enable_ssl = var.enable_ssl
+    s3_enabled = var.enable_s3
     http_port  = var.http_port
   }
 
@@ -133,6 +135,7 @@ module "renterd_autopilot" {
 
   network = {
     enable_ssl = var.enable_ssl
+    s3_enabled = var.enable_s3
     http_port  = var.http_port
   }
 

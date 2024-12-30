@@ -99,6 +99,12 @@ variable "enable_ssl" {
   default     = false
 }
 
+variable "enable_s3" {
+  description = "Enable S3 for the renterd cluster"
+  type        = bool
+  default     = true
+}
+
 variable "metrics_password" {
   description = "Password for metrics service"
   type        = string
