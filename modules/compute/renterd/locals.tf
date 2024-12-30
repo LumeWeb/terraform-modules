@@ -190,7 +190,7 @@ locals {
 
   # Metrics environment variables
   metrics_env_vars = var.metrics_enabled ? {
-    METRICS_PORT = var.metrics_port
+    METRICS_PORT = local.adjusted_metrics_port
     METRICS_PASSWORD = var.metrics_password
     METRICS_SERVICE_NAME = "${var.metrics_service_name}-${var.environment}"
     ETCD_ENDPOINTS = join(",", var.etcd_endpoints)
@@ -199,6 +199,7 @@ locals {
     ETCD_PREFIX = var.etcd_prefix
   } : {}
 
+  adjusted_metrics_port = var.metrics_enabled && var.network.s3_enabled && var.metrics_port == local.s3_internal_port ? var.metrics_port + 1 : var.metrics_port
   # 3. Environment variables - Final merged configuration
   service_env_vars = merge(
     local.base_env_vars,
@@ -229,8 +230,8 @@ locals {
     ] : [],
       var.metrics_enabled ? [
       {
-        port   = var.metrics_port
-        as     = var.metrics_port
+        port   = local.adjusted_metrics_port
+        as     = local.adjusted_metrics_port
         global = true
         proto  = "tcp"
       }
