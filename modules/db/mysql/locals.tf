@@ -23,7 +23,7 @@ locals {
         value = var.resources.persistent_storage.size
         unit  = var.resources.persistent_storage.unit
       }
-      mount     = "/var/lib/mysql"
+      mount     = var.resources.persistent_storage.mount
       class     = var.resources.persistent_storage.class
       read_only = false
     }
