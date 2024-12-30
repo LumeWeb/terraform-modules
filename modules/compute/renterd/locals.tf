@@ -229,8 +229,8 @@ locals {
     ] : [],
       var.metrics_enabled ? [
       {
-        port   = 8080
-        as     = 8080
+        port   = var.metrics_port
+        as     = var.metrics_port
         global = true
         proto  = "tcp"
       }
