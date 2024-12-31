@@ -54,7 +54,8 @@ locals {
     PORTAL__CORE__CLUSTERED__ENABLED = var.cluster ? "true" : "false"
 
     # SSL Email
-    CADDY_EMAIL = var.ssl_email
+    CADDY_EMAIL       = var.ssl_email
+    CADDY_ETCD_PREFIX = var.caddy_etcd_prefix
   }
 
   # Add conditional database environment variables

@@ -197,3 +197,9 @@ variable "metrics_etcd_prefix" {
   type        = string
   default     = "/discovery/prometheus"
 }
+
+variable "caddy_etcd_prefix" {
+  description = "Prefix for etcd keys for valkey service discovery by prometheus"
+  type        = string
+  default     = "/config/caddy"
+}
