@@ -15,7 +15,8 @@ module "renterd_bus" {
   etcd_endpoints       = var.etcd_endpoints
   etcd_username        = var.etcd_username
   etcd_password        = var.etcd_password
-  etcd_prefix          = var.etcd_prefix
+  etcd_metrics_prefix =  var.etcd_metrics_prefix
+  etcd_discovery_prefix = var.etcd_discovery_prefix
 
 
   allowed_providers = var.allowed_providers
@@ -65,7 +66,8 @@ module "renterd_workers" {
   etcd_endpoints       = var.etcd_endpoints
   etcd_username        = var.etcd_username
   etcd_password        = var.etcd_password
-  etcd_prefix          = var.etcd_prefix
+  etcd_metrics_prefix =  var.etcd_metrics_prefix
+  etcd_discovery_prefix = var.etcd_discovery_prefix
 
   allowed_providers = var.allowed_providers
 
@@ -123,7 +125,8 @@ module "renterd_autopilot" {
   etcd_endpoints       = var.etcd_endpoints
   etcd_username        = var.etcd_username
   etcd_password        = var.etcd_password
-  etcd_prefix          = var.etcd_prefix
+  etcd_metrics_prefix =  var.etcd_metrics_prefix
+  etcd_discovery_prefix = var.etcd_discovery_prefix
 
   allowed_providers = var.allowed_providers
 

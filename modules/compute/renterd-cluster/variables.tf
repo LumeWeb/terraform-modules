@@ -181,8 +181,14 @@ variable "etcd_password" {
   sensitive   = true
 }
 
-variable "etcd_prefix" {
+variable "etcd_metrics_prefix" {
   description = "Prefix for etcd keys"
   type        = string
   default     = "/discovery/prometheus"
+}
+
+variable "etcd_discovery_prefix" {
+  description = "Prefix for etcd keys"
+  type        = string
+  default     = "/discovery/portal"
 }
