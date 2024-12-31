@@ -122,7 +122,7 @@ variable "etcd" {
     endpoints = list(string)
     username = string
     password = string
-    prefix   = optional(string, "/discovery")
+    prefix = optional(string, "/discovery")
   })
   sensitive = true
 }
@@ -192,14 +192,55 @@ variable "metrics_service_name" {
   description = "Name of the service"
   type        = string
 }
+
 variable "metrics_etcd_prefix" {
   description = "Prefix for etcd keys for valkey service discovery by prometheus"
   type        = string
   default     = "/discovery/prometheus"
 }
 
-variable "caddy_etcd_prefix" {
-  description = "Prefix for etcd keys for valkey service discovery by prometheus"
+variable "caddy_s3_endpoint" {
+  description = "S3 endpoint for Caddy storage"
   type        = string
-  default     = "/config/caddy"
+  default     = ""
+
+  validation {
+    condition = var.caddy_s3_endpoint == "" || can(regex("^[^\\s]+$", var.caddy_s3_endpoint))
+    error_message = "Caddy S3 endpoint must be empty or a valid endpoint string"
+  }
+}
+
+variable "caddy_s3_bucket" {
+  description = "S3 bucket for Caddy storage"
+  type        = string
+  default     = ""
+
+  validation {
+    condition = var.caddy_s3_bucket == "" || can(regex("^[^\\s]+$", var.caddy_s3_bucket))
+    error_message = "Caddy S3 bucket must be empty or a valid bucket name"
+  }
+}
+
+variable "caddy_s3_access_key" {
+  description = "S3 access key for Caddy storage"
+  type        = string
+  default     = ""
+  sensitive   = true
+
+  validation {
+    condition = var.caddy_s3_access_key == "" || can(regex("^[^\\s]+$", var.caddy_s3_access_key))
+    error_message = "Caddy S3 access key must be empty or a valid key string"
+  }
+}
+
+variable "caddy_s3_secret_key" {
+  description = "S3 secret key for Caddy storage"
+  type        = string
+  default     = ""
+  sensitive   = true
+
+  validation {
+    condition = var.caddy_s3_secret_key == "" || can(regex("^[^\\s]+$", var.caddy_s3_secret_key))
+    error_message = "Caddy S3 secret key must be empty or a valid key string"
+  }
 }

@@ -1,3 +1,15 @@
+check "s3_config" {
+  assert {
+    condition = !var.cluster || (
+      var.caddy_s3_endpoint != "" &&
+      var.caddy_s3_bucket != "" &&
+      var.caddy_s3_access_key != "" &&
+      var.caddy_s3_secret_key != ""
+    )
+    error_message = "When cluster is enabled, all Caddy S3 configuration values must be provided"
+  }
+}
+
 module "portal_deployment" {
   source = "../../compute/akash"
 

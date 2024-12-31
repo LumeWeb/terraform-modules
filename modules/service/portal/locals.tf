@@ -54,9 +54,15 @@ locals {
     PORTAL__CORE__CLUSTERED__ENABLED = var.cluster ? "true" : "false"
 
     # SSL Email
-    CADDY_EMAIL       = var.ssl_email
-    CADDY_ETCD_PREFIX = var.caddy_etcd_prefix
+    CADDY_EMAIL = var.ssl_email
   }
+
+  caddy_s3_env_vars = var.cluster ? {
+    CADDY_S3_ENDPOINT = var.caddy_s3_endpoint
+    CADDY_S3_BUCKET   = var.caddy_s3_bucket
+    CADDY_S3_ACCESS_KEY = var.caddy_s3_access_key
+    CADDY_S3_SECRET_KEY = var.caddy_s3_secret_key
+  } : {}
 
   # Add conditional database environment variables
   db_env_vars = var.database.type == "sqlite" ? {
@@ -83,7 +89,7 @@ locals {
   } : {}
 
   # Final environment variables including extras
-  final_env_vars = merge(local.base_env_vars, local.db_env_vars, var.extra_env_vars, local.metrics_env_vars)
+  final_env_vars = merge(local.base_env_vars, local.db_env_vars, var.extra_env_vars, local.metrics_env_vars, local.caddy_s3_env_vars)
 
   # Service expose configuration
   service_expose = concat(
