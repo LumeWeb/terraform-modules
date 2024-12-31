@@ -148,7 +148,6 @@ locals {
   autopilot_base_env_vars = {
     RENTERD_HTTP_ADDRESS = ":${local.http_port}"
     RENTERD_S3_ENABLED   = tostring(var.network.s3_enabled)
-    RENTERD_WORKER_ENABLED = "false"
 
     # Autopilot-specific configurations
     RENTERD_BUS_REMOTE_ADDR  = local.autopilot_bus_remote_addr
@@ -200,7 +199,15 @@ locals {
     ETCD_ENDPOINTS = join(",", var.etcd_endpoints)
     ETCD_USERNAME = var.etcd_username
     ETCD_PASSWORD = var.etcd_password
-    ETCD_PREFIX = var.etcd_prefix
+    ETCD_PREFIX = var.etcd_metrics_prefix
+  } : {}
+
+  cluster_env_vars = local.is_cluster_mode ? {
+    ETCD_ENDPOINTS = join(",", var.etcd_endpoints)
+    ETCD_USERNAME = var.etcd_username
+    ETCD_PASSWORD = var.etcd_password
+    RENTERD_CLUSTER_ENABLED = "true"
+    RENTERD_CLUSTER_ETCD_DISCOVERY_PREFIX = var.etcd_discovery_prefix
   } : {}
 
   adjusted_metrics_port = var.metrics_enabled && var.network.s3_enabled && var.metrics_port == local.s3_internal_port ? var.metrics_port + 1 : var.metrics_port
@@ -208,7 +215,8 @@ locals {
   service_env_vars = merge(
     local.base_env_vars,
     local.database_env_vars,
-    local.metrics_env_vars
+    local.metrics_env_vars,
+    local.cluster_env_vars
   )
 
   # Service expose configuration with port mapping
