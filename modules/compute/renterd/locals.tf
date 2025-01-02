@@ -101,8 +101,8 @@ locals {
 
   # Base environment variables for bus mode
   bus_base_env_vars = {
-    RENTERD_AUTOPILOT_ENABLED = "false"
-    RENTERD_WORKER_ENABLED    = "false"
+    # RENTERD_AUTOPILOT_ENABLED = "false"
+    # RENTERD_WORKER_ENABLED    = "false"
     RENTERD_SEED              = var.seed
     RENTERD_HTTP_ADDRESS      = ":${local.http_port}"
     # Using internal S3 port to avoid port conflicts
