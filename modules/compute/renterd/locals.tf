@@ -203,11 +203,11 @@ locals {
   } : {}
 
   cluster_env_vars = local.is_cluster_mode ? {
-    ETCD_ENDPOINTS = join(",", var.etcd_endpoints)
-    ETCD_USERNAME = var.etcd_username
-    ETCD_PASSWORD = var.etcd_password
-    RENTERD_CLUSTER_ENABLED = "true"
-    RENTERD_CLUSTER_ETCD_DISCOVERY_PREFIX = var.etcd_discovery_prefix
+    # ETCD_ENDPOINTS = join(",", var.etcd_endpoints)
+    # ETCD_USERNAME = var.etcd_username
+    # ETCD_PASSWORD = var.etcd_password
+    # RENTERD_CLUSTER_ENABLED = "true"
+    # RENTERD_CLUSTER_ETCD_DISCOVERY_PREFIX = var.etcd_discovery_prefix
   } : {}
 
   adjusted_metrics_port = var.metrics_enabled && var.network.s3_enabled && var.metrics_port == local.s3_internal_port ? var.metrics_port + 1 : var.metrics_port
