@@ -13,7 +13,7 @@ locals {
   is_cluster_mode = var.cluster == true
   proto = coalesce(var.network.enable_ssl, true) ? "https" : "http"
   http_port = coalesce(var.network.enable_ssl, true) ? 80 : coalesce(var.network.http_port, 9980)
-  s3_port = coalesce(var.network.enable_ssl, true) ? 80 : coalesce(var.network.s3_port, 8080)
+  s3_port = coalesce(var.network.enable_ssl, true) ? 80 : coalesce(var.network.s3_port, 8082)
 
   # Special case: If S3 port is 80, use 9981 internally to avoid port conflicts while maintaining external port 80
   s3_internal_port = local.s3_port == 80 ? 8080 : local.s3_port
@@ -41,8 +41,6 @@ locals {
         var.mode == "autopilot" ? "${var.dns.autopilot_prefix}.${var.name}.${var.dns.base_domain}" :
         null
   ) : "${var.name}-${var.dns.solo_prefix}.${var.dns.base_domain}"
-
-  s3_fqdn = var.network.s3_enabled ? "s3.${local.service_fqdn}" : null
 
   # Worker address configuration
   worker_external_addr = var.mode == "worker" ? (
@@ -237,7 +235,6 @@ locals {
         as     = local.s3_port          # External port (remains 80 when specified)
         global = true
         proto  = "tcp"
-        accept = local.s3_fqdn != null ? [local.s3_fqdn] : []
       }
     ] : [],
       var.metrics_enabled ? [
