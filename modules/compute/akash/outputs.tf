@@ -101,9 +101,15 @@ output "provider_host" {
   )
 }
 
+output "has_http_ports" {
+  description = "Whether the deployment has HTTP/HTTPS ports"
+  value = local.has_http_ports
+}
+
+
 output "forwarded_ports" {
   description = "Forwarded ports for the deployment (only available when not using port 80/443)"
-  value = local.has_http_ports ? [] : try(local.service_details.forwarded_ports, [])
+  value = try(local.service_details.forwarded_ports, [])
 }
 
 output "port" {
