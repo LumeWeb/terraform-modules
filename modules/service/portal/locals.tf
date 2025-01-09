@@ -17,6 +17,7 @@ locals {
     PORTAL__CORE__DOMAIN      = var.domain
     PORTAL__CORE__PORTAL_NAME = var.portal_name
     PORTAL__CORE__PORT = tostring(var.port)
+    PORTAL__CORE__IDENTITY = var.identity
 
     # Mail
     PORTAL__CORE__MAIL__HOST     = var.mail.host
@@ -58,8 +59,8 @@ locals {
   }
 
   caddy_s3_env_vars = var.cluster ? {
-    CADDY_S3_ENDPOINT = var.caddy_s3_endpoint
-    CADDY_S3_BUCKET   = var.caddy_s3_bucket
+    CADDY_S3_ENDPOINT   = var.caddy_s3_endpoint
+    CADDY_S3_BUCKET     = var.caddy_s3_bucket
     CADDY_S3_ACCESS_KEY = var.caddy_s3_access_key
     CADDY_S3_SECRET_KEY = var.caddy_s3_secret_key
   } : {}
