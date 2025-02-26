@@ -42,7 +42,7 @@ module "renterd_bus" {
     persistent_storage = {
       size  = var.bus_storage_size
       path  = "/data"
-      class = "beta3"
+      class = "beta2"
     }
   }
 }

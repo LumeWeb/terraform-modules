@@ -30,7 +30,7 @@ locals {
         unit = var.storage_unit
       }
       mount = "/var/lib/grafana"
-      class = "beta3"
+      class = "beta2"
     } : null
   }
 

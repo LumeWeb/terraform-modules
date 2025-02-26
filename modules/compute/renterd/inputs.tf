@@ -146,7 +146,7 @@ variable "resources" {
     persistent_storage = optional(object({
       size = optional(number, 1)
       unit = optional(string, "Gi")
-      class = optional(string, "beta3")
+      class = optional(string, "beta2")
       mount = optional(string, "/data")
     }), {})
   })
@@ -172,7 +172,7 @@ variable "resources" {
   }
 
   validation {
-    condition = contains(["beta1", "beta2", "beta3"], var.resources.persistent_storage.class)
+    condition = contains(["beta1", "beta2", "beta2"], var.resources.persistent_storage.class)
     error_message = "Storage class must be one of: beta1, beta2, beta3"
   }
 }

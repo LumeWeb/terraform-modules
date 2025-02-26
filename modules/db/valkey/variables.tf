@@ -32,7 +32,7 @@ variable "resources" {
     persistent_storage = optional(object({
       size = optional(number, 1)
       unit = optional(string, "Gi")
-      class = optional(string, "beta3")
+      class = optional(string, "beta2")
       mount = optional(string, "/data")
     }), {})
   })

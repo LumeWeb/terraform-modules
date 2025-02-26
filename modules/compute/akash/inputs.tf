@@ -27,7 +27,7 @@ variable "service" {
           unit  = string
         })
         mount = optional(string, "/data")
-        class = optional(string, "beta3")
+        class = optional(string, "beta2")
         read_only = optional(bool, false)
       }))
     }), {
@@ -90,7 +90,7 @@ variable "service" {
 
   validation {
     condition = var.service.storage.persistent_data == null ? true : (
-    contains(["beta1", "beta2", "beta3"], coalesce(var.service.storage.persistent_data.class, "beta3"))
+    contains(["beta1", "beta2", "beta2"], coalesce(var.service.storage.persistent_data.class, "beta2"))
     )
     error_message = "Invalid storage class. Must be one of: beta1, beta2, beta3"
   }
