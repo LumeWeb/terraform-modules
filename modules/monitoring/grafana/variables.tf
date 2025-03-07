@@ -10,6 +10,12 @@ variable "image" {
   default     = "ghcr.io/lumeweb/akash-grafana:develop"
 }
 
+variable "environment" {
+  description = "Deployment environment"
+  type        = string
+  default     = "dev"
+}
+
 variable "admin_password" {
   description = "Grafana admin password"
   type        = string

@@ -72,6 +72,7 @@ module "grafana_deployment" {
   }
 
   allowed_providers = var.allowed_providers
+  environment = var.environment
 
   tags = merge(
     var.tags,
